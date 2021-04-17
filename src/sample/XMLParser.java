@@ -11,15 +11,9 @@ import java.util.HashMap;
 
 public class XMLParser {
     String xml_path;
-    BufferedInputStream bis;
 
     public XMLParser(String xml_path) {
         this.xml_path = xml_path;
-        try {
-            this.bis = new BufferedInputStream(new FileInputStream(xml_path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getXml_path() {
