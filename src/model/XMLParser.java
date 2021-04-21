@@ -1,4 +1,4 @@
-package sample;
+package model;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -10,21 +10,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class XMLParser {
-    String xml_path;
-
-    public XMLParser(String xml_path) {
-        this.xml_path = xml_path;
-    }
-
-    public String getXml_path() {
-        return xml_path;
-    }
-
-    public void setXml_path(String xml_path) {
-        this.xml_path = xml_path;
-    }
-
-    public HashMap decodeXML() {
+    public static HashMap decodeXML(String xml_path) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
         String xml_properties_tag_name = "chunk";
@@ -57,7 +43,7 @@ public class XMLParser {
         return xml_properties;
     }
 
-    private HashMap<String, HashMap<String, String>> getElementAttributes(Element element) {
+    private static HashMap<String, HashMap<String, String>> getElementAttributes(Element element) {
         String name, type, format, node;
 
         if (element.getElementsByTagName("name").getLength() > 0) {
