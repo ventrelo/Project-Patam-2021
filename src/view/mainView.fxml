@@ -47,11 +47,20 @@
                   <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Options">
+               <items>
+                  <Menu mnemonicParsing="false" text="Upload">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="XML Settings" onAction="#openFileExplorer"/>
+                    </items>
+                  </Menu>
+               </items>
+            </Menu>
          </menus>
       </MenuBar>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="363.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button layoutX="56.0" layoutY="72.0" mnemonicParsing="false" onAction="#openFileExplorer" text="FileExplorer" />
+
          </children>
       </AnchorPane>
    </children>

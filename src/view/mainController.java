@@ -7,11 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import vm.mainVM;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -31,19 +31,22 @@ public class mainController implements Observer {
 
     public void openFileExplorer(ActionEvent event) {
 
-        Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
         FileChooser fil_chooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML file (*.xml)","*.xml");
+        fil_chooser.getExtensionFilters().add(extensionFilter);
         File file = fil_chooser.showOpenDialog(stage);
-
+        Alert alert;
         if (file != null) {
 
-            mainVM.parseXML(file.getAbsolutePath());
-                if(mainVM.xmlSettings != null)
-                {
-                    System.out.println(mainVM.xmlSettings);
-                }
-                else System.out.println("Fail");
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("XML settings upload successful");
+        } else
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("XML settings upload FAILED");
         }
+        alert.showAndWait();
     }
 
     @Override
