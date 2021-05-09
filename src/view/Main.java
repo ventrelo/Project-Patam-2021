@@ -25,6 +25,10 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
+        mainC.init();
+
+
+
 
     }
 
