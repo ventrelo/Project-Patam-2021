@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -13,9 +12,11 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import view.joystick.Joystick?>
 <VBox prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainController">
    <children>
       <MenuBar VBox.vgrow="NEVER">
@@ -70,9 +71,6 @@
       </MenuBar>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="500.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
          <children>
-            <Canvas fx:id="js_joystick" height="200.0" layoutX="283.0" layoutY="144.0" width="200.0" />
-            <Slider fx:id="js_rudder" blockIncrement="0.1" layoutX="283.0" layoutY="344.0" max="1.0" min="-1.0" prefHeight="14.0" prefWidth="200.0" />
-            <Slider fx:id="js_throttle" blockIncrement="0.1" layoutX="276.0" layoutY="144.0" max="1.0" min="-1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="14.0" />
             <Slider fx:id="js_playback_bar" blockIncrement="1.0" layoutX="271.0" layoutY="447.0" prefHeight="14.0" prefWidth="200.0" />
             <Label fx:id="js_vid_time" layoutX="471.0" layoutY="442.0" prefHeight="25.0" prefWidth="55.0" text="00:00:00">
                <font>
@@ -163,6 +161,12 @@
                   </Label>
                </children>
             </VBox>
+            <BorderPane layoutX="257.0" layoutY="205.0" prefHeight="200.0" prefWidth="200.0" >
+               <center>
+                  <Joystick fx:id="joystick"></Joystick>
+               </center>
+            </BorderPane>
+
          </children>
       </AnchorPane>
    </children>

@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import view.joystick.Joystick;
 import vm.mainVM;
 
 
@@ -22,9 +23,8 @@ import java.util.Observer;
 public class mainController implements Observer {
 
 
-
     @FXML
-    Canvas js_joystick;
+    Joystick joystick;
     @FXML
     Label cb_height;
     @FXML
@@ -38,7 +38,7 @@ public class mainController implements Observer {
     @FXML
     Label cb_yaw;
 
-    JoyStick joyStick;
+
     public vm.mainVM mainVM;
     public void setMainVM(mainVM vm)
     {
@@ -55,8 +55,7 @@ public class mainController implements Observer {
     }
     public void init()
     {
-        joyStick = new JoyStick();
-        joyStick.init(js_joystick);
+
     }
     public void openFileExplorer(ActionEvent event) {
 
