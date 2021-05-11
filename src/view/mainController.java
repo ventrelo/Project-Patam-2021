@@ -50,7 +50,7 @@ public class mainController implements Observer {
         cb_roll.textProperty().bind(mainVM.roll.asString());
         cb_pitch.textProperty().bind(mainVM.pitch.asString());
         cb_yaw.textProperty().bind(mainVM.yaw.asString());
-
+        
 
     }
     public void init()

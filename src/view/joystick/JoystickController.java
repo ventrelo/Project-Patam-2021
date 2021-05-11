@@ -1,6 +1,7 @@
 package view.joystick;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,14 +18,22 @@ public class JoystickController {
     @FXML
     Slider js_rudder;
     GraphicsContext gc;
-    double size,jx,jy;
+    double size;
+    DoubleProperty jx,jy;
     public void init()
     {
+
+        jx = new SimpleDoubleProperty();
+        jy = new SimpleDoubleProperty();
         gc = js_joystick.getGraphicsContext2D();
-        jx = js_joystick.getWidth()/2;
-        jy = js_joystick.getHeight()/2;
+        jx.setValue(js_joystick.getWidth()/2);
+        jy.setValue(js_joystick.getHeight()/2);
         size = 50;
-        gc.fillOval(jx-(size/2),jy-(size/2),size,size);
+        gc.fillOval(jx.getValue()-(size/2),jy.getValue()-(size/2),size,size);
+    }
+    public void execute()
+    {
+
     }
 
 
