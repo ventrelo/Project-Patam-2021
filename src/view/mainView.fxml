@@ -12,11 +12,10 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import view.joystick.Joystick?>
+
 <VBox prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainController">
    <children>
       <MenuBar VBox.vgrow="NEVER">
@@ -109,7 +108,7 @@
             </VBox>
             <VBox fx:id="cb_graphs" layoutX="541.0" layoutY="20.0" prefHeight="300.0" prefWidth="245.0">
                <children>
-                  <LineChart prefHeight="150.0" prefWidth="245.0">
+                  <LineChart fx:id="graph1" prefHeight="150.0" prefWidth="245.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -117,7 +116,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <LineChart prefHeight="150.0" prefWidth="245.0">
+                  <LineChart fx:id="graph2" prefHeight="150.0" prefWidth="245.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -161,11 +160,7 @@
                   </Label>
                </children>
             </VBox>
-            <BorderPane layoutX="257.0" layoutY="205.0" prefHeight="200.0" prefWidth="200.0" >
-               <center>
-                  <Joystick fx:id="joystick"></Joystick>
-               </center>
-            </BorderPane>
+            <Joystick fx:id="joystick" layoutX="271.0" layoutY="170.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" />
 
          </children>
       </AnchorPane>

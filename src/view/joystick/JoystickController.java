@@ -33,7 +33,8 @@ public class JoystickController {
     }
     public void execute()
     {
-
+        gc.clearRect(0,0,js_joystick.getHeight(),js_joystick.getWidth());
+        gc.fillOval(jx.getValue()-(size/2),jy.getValue()-(size/2),size,size);
     }
 
 

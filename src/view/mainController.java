@@ -66,7 +66,7 @@ public class mainController implements Observer {
         File file = fil_chooser.showOpenDialog(stage);
         Alert alert;
         if (file != null) {
-
+            mainVM.parseXML(file.getAbsolutePath());
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("XML settings upload successful");
         } else
@@ -79,6 +79,24 @@ public class mainController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        if (o == mainVM)
+        {
 
+        }
+    }
+    public void updateJoystick(double aileron,double elevators,double rudder,double throttle)
+    {
+        joystick.rudder.setValue(rudder);
+        joystick.throttle.setValue(throttle);
+        joystick.aileron.setValue(normalize(aileron));
+        joystick.elevators.setValue(normalize(elevators));
+        joystick.update();
+    }
+    // This method receives a double range [-1,1] and converts it to double [25,175]
+    public double normalize(double input)
+    {
+        double output = input;
+        output = (((output + 1)/2)*150) + 25;
+        return output;
     }
 }

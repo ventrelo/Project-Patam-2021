@@ -8,13 +8,14 @@ import java.io.IOException;
 
 public class Joystick extends BorderPane {
     public DoubleProperty aileron, elevators,rudder,throttle;
+    public JoystickController joystickController;
     public Joystick(){
         super();
         try {
             FXMLLoader fxl = new FXMLLoader();
             BorderPane joy = fxl.load(getClass().getResource("joystick.fxml").openStream());
 
-            JoystickController joystickController = fxl.getController();
+            joystickController = fxl.getController();
             this.getChildren().add(joy);
             joystickController.init();
             rudder = joystickController.js_rudder.valueProperty();
@@ -28,10 +29,10 @@ public class Joystick extends BorderPane {
         }
 
     }
-    public void update(DoubleProperty aileron,DoubleProperty elevators, DoubleProperty rudder, DoubleProperty throttle)
-    {
-
-    }
+   public void update()
+   {
+       joystickController.execute();
+   }
 
 
 }

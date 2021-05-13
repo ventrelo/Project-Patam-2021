@@ -30,6 +30,10 @@ public class mainVM extends Observable implements Observer {
   public mainVM(XMLParserModel xmlPM)
   {
      this.xmlParserModel = xmlPM;
+     aileron= new SimpleDoubleProperty();
+     elevator= new SimpleDoubleProperty();
+     rudder= new SimpleDoubleProperty();
+     throttle= new SimpleDoubleProperty();
      height = new SimpleDoubleProperty();
      speed = new SimpleDoubleProperty();
      direction = new SimpleDoubleProperty();
@@ -46,6 +50,22 @@ public class mainVM extends Observable implements Observer {
       if(o==xmlParserModel)
       {
          xmlSettings = xmlParserModel.getHashMap();
+      }
+      if(o == null) //This will be a future time series object
+      {
+          aileron = null;
+          elevator = null;
+          rudder = null;
+          throttle = null;
+          height = null;
+          speed = null;
+          direction = null;
+          roll = null;
+          pitch= null;
+          yaw = null;
+          setChanged();
+          notifyObservers();
+
       }
    }
 }
