@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import view.joystick.Joystick?>
 
-<VBox prefHeight="435.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainController">
+<VBox prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainController">
    <children>
       <MenuBar VBox.vgrow="NEVER">
          <menus>
@@ -42,24 +50,117 @@
                   <MenuItem mnemonicParsing="false" text="Unselect All" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Help">
+            <Menu mnemonicParsing="false" text="View">
                <items>
-                  <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                  <CheckMenuItem fx:id="toggle_graphs" mnemonicParsing="false" selected="true" text="Graphs" />
+                  <CheckMenuItem fx:id="toggle_components" mnemonicParsing="false" selected="true" text="Components" />
+                  <CheckMenuItem fx:id="toggle_stick" mnemonicParsing="false" selected="true" text="Control Stick" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Options">
                <items>
                   <Menu mnemonicParsing="false" text="Upload">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="XML Settings" onAction="#openFileExplorer"/>
+                      <MenuItem mnemonicParsing="false" onAction="#openFileExplorer" text="XML Settings" />
                     </items>
                   </Menu>
                </items>
             </Menu>
          </menus>
       </MenuBar>
-      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="363.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="500.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
          <children>
+            <Slider fx:id="js_playback_bar" blockIncrement="1.0" layoutX="271.0" layoutY="447.0" prefHeight="14.0" prefWidth="200.0" />
+            <Label fx:id="js_vid_time" layoutX="471.0" layoutY="442.0" prefHeight="25.0" prefWidth="55.0" text="00:00:00">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="js_play" layoutX="271.0" layoutY="417.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" text="PLAY" />
+            <Button fx:id="js_pause" layoutX="331.0" layoutY="417.0" mnemonicParsing="false" text="PAUSE" />
+            <VBox fx:id="cb_props" layoutX="14.0" layoutY="28.0" prefHeight="125.0" prefWidth="100.0">
+               <children>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="F_HEIGHT">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="F_SPEED">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="F_DIR">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="F_ROLL">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="F_PITCH">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="F_YAW">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+               </children>
+            </VBox>
+            <VBox fx:id="cb_graphs" layoutX="541.0" layoutY="20.0" prefHeight="300.0" prefWidth="245.0">
+               <children>
+                  <LineChart fx:id="graph1" prefHeight="150.0" prefWidth="245.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <LineChart fx:id="graph2" prefHeight="150.0" prefWidth="245.0">
+                     <xAxis>
+                        <CategoryAxis side="BOTTOM" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis side="LEFT" />
+                     </yAxis>
+                  </LineChart>
+               </children>
+            </VBox>
+            <VBox fx:id="cb_vals" layoutX="114.0" layoutY="28.0" prefHeight="125.0" prefWidth="135.0">
+               <children>
+                  <Label fx:id="cb_height" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="135.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cb_speed" prefHeight="27.0" prefWidth="135.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cb_dir" prefHeight="27.0" prefWidth="135.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cb_roll" prefHeight="27.0" prefWidth="135.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cb_pitch" prefHeight="27.0" prefWidth="135.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cb_yaw" prefHeight="27.0" prefWidth="135.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Joystick fx:id="joystick" layoutX="271.0" layoutY="170.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" />
 
          </children>
       </AnchorPane>
