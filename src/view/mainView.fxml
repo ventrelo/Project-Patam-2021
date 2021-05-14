@@ -9,7 +9,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -22,39 +21,20 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem mnemonicParsing="false" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Open…" />
-                  <Menu mnemonicParsing="false" text="Open Recent" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save As…" />
-                  <MenuItem mnemonicParsing="false" text="Revert" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Preferences…" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Quit" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
                <items>
                   <MenuItem mnemonicParsing="false" text="Undo" />
-                  <MenuItem mnemonicParsing="false" text="Redo" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Cut" />
-                  <MenuItem mnemonicParsing="false" text="Copy" />
-                  <MenuItem mnemonicParsing="false" text="Paste" />
-                  <MenuItem mnemonicParsing="false" text="Delete" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Select All" />
-                  <MenuItem mnemonicParsing="false" text="Unselect All" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <CheckMenuItem fx:id="toggle_graphs" mnemonicParsing="false" selected="true" text="Graphs" />
-                  <CheckMenuItem fx:id="toggle_components" mnemonicParsing="false" selected="true" text="Components" />
-                  <CheckMenuItem fx:id="toggle_stick" mnemonicParsing="false" selected="true" text="Control Stick" />
+                  <CheckMenuItem fx:id="toggle_graphs" mnemonicParsing="false" onAction="#toggleGraphs" selected="true" text="Graphs" />
+                  <CheckMenuItem fx:id="toggle_components" mnemonicParsing="false" onAction="#toggleProps" selected="true" text="Components" />
+                  <CheckMenuItem fx:id="toggle_stick" mnemonicParsing="false" onAction="#toggleStick" selected="true" text="Control Stick" />
+                  <CheckMenuItem fx:id="toggle_stick1" mnemonicParsing="false" onAction="#togglePlayBack" selected="true" text="Playback Bar" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Options">
@@ -62,6 +42,7 @@
                   <Menu mnemonicParsing="false" text="Upload">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#openFileExplorer" text="XML Settings" />
+                        <MenuItem mnemonicParsing="false" text="CSV File" />
                     </items>
                   </Menu>
                </items>
@@ -70,14 +51,18 @@
       </MenuBar>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="500.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
          <children>
-            <Slider fx:id="js_playback_bar" blockIncrement="1.0" layoutX="271.0" layoutY="447.0" prefHeight="14.0" prefWidth="200.0" />
-            <Label fx:id="js_vid_time" layoutX="471.0" layoutY="442.0" prefHeight="25.0" prefWidth="55.0" text="00:00:00">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Button fx:id="js_play" layoutX="271.0" layoutY="417.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" text="PLAY" />
-            <Button fx:id="js_pause" layoutX="331.0" layoutY="417.0" mnemonicParsing="false" text="PAUSE" />
+            <AnchorPane fx:id="playback_bar" layoutX="268.0" layoutY="417.0">
+               <children>
+                  <Slider fx:id="js_playback_bar" blockIncrement="1.0" layoutX="3.0" layoutY="30.0" prefHeight="14.0" prefWidth="200.0" />
+                  <Label fx:id="js_vid_time" layoutX="203.0" layoutY="25.0" prefHeight="25.0" prefWidth="55.0" text="00:00:00">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="js_play" layoutX="3.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" text="PLAY" />
+                  <Button fx:id="js_pause" layoutX="63.0" mnemonicParsing="false" text="PAUSE" />
+               </children>
+            </AnchorPane>
             <VBox fx:id="cb_props" layoutX="14.0" layoutY="28.0" prefHeight="125.0" prefWidth="100.0">
                <children>
                   <Label prefHeight="20.0" prefWidth="100.0" text="F_HEIGHT">
