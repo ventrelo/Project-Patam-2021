@@ -5,14 +5,19 @@ package view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.scene.Node;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import view.joystick.Joystick;
 import vm.mainVM;
+
 
 
 import java.io.File;
@@ -22,21 +27,14 @@ import java.util.Observer;
 
 public class mainController implements Observer {
 
-
+    @FXML
+    VBox cb_graphs,cb_props,cb_vals;
+    @FXML
+    AnchorPane playback_bar;
     @FXML
     Joystick joystick;
     @FXML
-    Label cb_height;
-    @FXML
-    Label cb_speed;
-    @FXML
-    Label cb_dir;
-    @FXML
-    Label cb_roll;
-    @FXML
-    Label cb_pitch;
-    @FXML
-    Label cb_yaw;
+    Label cb_height,cb_speed,cb_dir,cb_roll,cb_pitch,cb_yaw;
 
 
     public vm.mainVM mainVM;
@@ -50,8 +48,6 @@ public class mainController implements Observer {
         cb_roll.textProperty().bind(mainVM.roll.asString());
         cb_pitch.textProperty().bind(mainVM.pitch.asString());
         cb_yaw.textProperty().bind(mainVM.yaw.asString());
-        
-
     }
     public void init()
     {
@@ -79,10 +75,7 @@ public class mainController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == mainVM)
-        {
 
-        }
     }
     public void updateJoystick(double aileron,double elevators,double rudder,double throttle)
     {
@@ -98,5 +91,45 @@ public class mainController implements Observer {
         double output = input;
         output = (((output + 1)/2)*150) + 25;
         return output;
+    }
+
+    public void toggleStick(ActionEvent event)
+    {
+        if(joystick.isVisible())
+            joystick.setVisible(false);
+        else
+            joystick.setVisible(true);
+    }
+    public void toggleGraphs(ActionEvent event)
+    {
+        if(cb_graphs.isVisible())
+            cb_graphs.setVisible(false);
+        else
+            cb_graphs.setVisible(true);
+    }
+    public void toggleProps(ActionEvent event)
+    {
+        if(cb_props.isVisible()) {
+            cb_props.setVisible(false);
+            cb_vals.setVisible(false);
+        }
+        else {
+            cb_props.setVisible(true);
+            cb_vals.setVisible(true);
+        }
+    }
+    public void togglePlayBack(ActionEvent event)
+    {
+        if(playback_bar.isVisible())
+            playback_bar.setVisible(false);
+        else
+            playback_bar.setVisible(true);
+    }
+
+
+    public void selected(MouseEvent mouseEvent) {
+        final Node selected = (Node) mouseEvent.getSource();
+        String str = selected.getId();
+        System.out.println(str);
     }
 }
