@@ -5,9 +5,11 @@ package view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.scene.Node;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
 
 import view.joystick.Joystick;
 import vm.mainVM;
+
 
 
 import java.io.File;
@@ -45,8 +48,6 @@ public class mainController implements Observer {
         cb_roll.textProperty().bind(mainVM.roll.asString());
         cb_pitch.textProperty().bind(mainVM.pitch.asString());
         cb_yaw.textProperty().bind(mainVM.yaw.asString());
-        
-
     }
     public void init()
     {
@@ -74,10 +75,7 @@ public class mainController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == mainVM)
-        {
 
-        }
     }
     public void updateJoystick(double aileron,double elevators,double rudder,double throttle)
     {
@@ -126,5 +124,12 @@ public class mainController implements Observer {
             playback_bar.setVisible(false);
         else
             playback_bar.setVisible(true);
+    }
+
+
+    public void selected(MouseEvent mouseEvent) {
+        final Node selected = (Node) mouseEvent.getSource();
+        String str = selected.getId();
+        System.out.println(str);
     }
 }

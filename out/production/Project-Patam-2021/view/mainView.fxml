@@ -113,32 +113,32 @@
             </VBox>
             <VBox fx:id="cb_vals" layoutX="114.0" layoutY="28.0" prefHeight="125.0" prefWidth="135.0">
                <children>
-                  <Label fx:id="cb_height" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="cb_height" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_speed" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="cb_speed" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_dir" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="cb_dir" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_roll" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="cb_roll" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_pitch" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="cb_pitch" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_yaw" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="cb_yaw" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
                      <font>
                         <Font size="18.0" />
                      </font>
