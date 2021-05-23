@@ -3,6 +3,9 @@ package vm;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import model.TimeSeries.TimeSeries;
 import model.XMLParserModel;
 
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import java.util.Observer;
 public class mainVM extends Observable implements Observer {
    public XMLParserModel xmlParserModel = new XMLParserModel();
    public HashMap xmlSettings;
+   private model.playable playable;
 
     //Joystick properties
     public DoubleProperty aileron;
@@ -26,6 +30,8 @@ public class mainVM extends Observable implements Observer {
     public DoubleProperty roll;
     public DoubleProperty pitch;
     public DoubleProperty yaw;
+    //PlayBack properties
+    public DoubleProperty playback_speed;
 
   public mainVM(XMLParserModel xmlPM)
   {
@@ -40,7 +46,10 @@ public class mainVM extends Observable implements Observer {
      roll = new SimpleDoubleProperty();
      pitch = new SimpleDoubleProperty();
      yaw = new SimpleDoubleProperty();
+     //
+     playback_speed = new SimpleDoubleProperty();
   }
+
    public void parseXML(String path)
    {
       xmlParserModel.ParseXML(path);
@@ -68,4 +77,10 @@ public class mainVM extends Observable implements Observer {
 
       }
    }
+
+    public void pause() {
+    }
+
+    public void play() {
+    }
 }

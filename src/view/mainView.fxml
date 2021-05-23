@@ -59,8 +59,11 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Button fx:id="js_play" layoutX="3.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" text="PLAY" />
-                  <Button fx:id="js_pause" layoutX="63.0" mnemonicParsing="false" text="PAUSE" />
+                  <Button fx:id="js_play" layoutX="3.0" mnemonicParsing="false" onAction="#play" prefHeight="25.0" prefWidth="55.0" text="PLAY" />
+                  <Button fx:id="js_pause" layoutX="63.0" mnemonicParsing="false" onAction="#pause" text="PAUSE" />
+                  <Label fx:id="pb_speed" layoutX="176.0" layoutY="1.0" prefHeight="27.0" prefWidth="55.0" text="1.00" />
+                  <Button fx:id="pb_minus" layoutX="150.0" layoutY="2.0" mnemonicParsing="false" onAction="#decrease_speed" prefHeight="25.0" prefWidth="26.0" text="-" />
+                  <Button fx:id="pb_plus" layoutX="204.0" layoutY="2.0" mnemonicParsing="false" onAction="#increase_speed" prefHeight="25.0" prefWidth="26.0" text="+" />
                </children>
             </AnchorPane>
             <VBox fx:id="cb_props" layoutX="14.0" layoutY="28.0" prefHeight="125.0" prefWidth="100.0">
@@ -113,32 +116,32 @@
             </VBox>
             <VBox fx:id="cb_vals" layoutX="114.0" layoutY="28.0" prefHeight="125.0" prefWidth="135.0">
                <children>
-                  <Label fx:id="cb_height" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
+                  <Label fx:id="cb_height" alignment="TOP_LEFT" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_speed" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
+                  <Label fx:id="cb_speed" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_dir" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
+                  <Label fx:id="cb_dir" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_roll" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
+                  <Label fx:id="cb_roll" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_pitch" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
+                  <Label fx:id="cb_pitch" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_yaw" prefHeight="27.0" prefWidth="135.0" onMousePressed="#selected">
+                  <Label fx:id="cb_yaw" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>

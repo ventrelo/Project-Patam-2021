@@ -2,6 +2,9 @@ package view;
 
 
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -35,6 +38,10 @@ public class mainController implements Observer {
     Joystick joystick;
     @FXML
     Label cb_height,cb_speed,cb_dir,cb_roll,cb_pitch,cb_yaw;
+    @FXML
+    Label pb_speed;
+
+    DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
 
 
     public vm.mainVM mainVM;
@@ -48,6 +55,8 @@ public class mainController implements Observer {
         cb_roll.textProperty().bind(mainVM.roll.asString());
         cb_pitch.textProperty().bind(mainVM.pitch.asString());
         cb_yaw.textProperty().bind(mainVM.yaw.asString());
+        //Play Back bar label binding
+        pb_speed.textProperty().bind(pb_speed_d.asString());
     }
     public void init()
     {
@@ -131,5 +140,23 @@ public class mainController implements Observer {
         final Node selected = (Node) mouseEvent.getSource();
         String str = selected.getId();
         System.out.println(str);
+    }
+    public void play()
+    {
+        mainVM.play();
+    }
+    public void pause()
+    {
+        mainVM.pause();
+    }
+    public void increase_speed()
+    {
+        pb_speed_d.setValue(pb_speed_d.getValue()+0.25);
+    }
+    public void decrease_speed()
+    {
+        if(pb_speed_d.getValue()>0.25) {
+            pb_speed_d.setValue(pb_speed_d.getValue() - 0.25);
+        }
     }
 }
