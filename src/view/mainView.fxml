@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import view.joystick.Joystick?>
 
-<VBox prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainController">
+<VBox prefHeight="548.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainController">
    <children>
       <MenuBar VBox.vgrow="NEVER">
          <menus>
@@ -41,7 +41,7 @@
                <items>
                   <Menu mnemonicParsing="false" text="Upload">
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#openFileExplorer" text="XML Settings" />
+                      <MenuItem mnemonicParsing="false" onAction="#uploadXMLsett" text="XML Settings" />
                         <MenuItem mnemonicParsing="false" text="CSV File" />
                     </items>
                   </Menu>
@@ -66,7 +66,7 @@
                   <Button fx:id="pb_plus" layoutX="204.0" layoutY="2.0" mnemonicParsing="false" onAction="#increase_speed" prefHeight="25.0" prefWidth="26.0" text="+" />
                </children>
             </AnchorPane>
-            <VBox fx:id="cb_props" layoutX="14.0" layoutY="28.0" prefHeight="125.0" prefWidth="100.0">
+            <VBox fx:id="cb_props" layoutX="14.0" layoutY="5.0" prefHeight="125.0" prefWidth="100.0">
                <children>
                   <Label prefHeight="20.0" prefWidth="100.0" text="F_HEIGHT">
                      <font>
@@ -94,7 +94,7 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox fx:id="cb_graphs" layoutX="541.0" layoutY="20.0" prefHeight="300.0" prefWidth="245.0">
+            <VBox fx:id="cb_graphs" layoutY="167.0" prefHeight="300.0" prefWidth="245.0">
                <children>
                   <LineChart fx:id="graph1" prefHeight="150.0" prefWidth="245.0">
                     <xAxis>
@@ -104,7 +104,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <LineChart fx:id="graph2" prefHeight="150.0" prefWidth="245.0">
+                  <LineChart fx:id="graph2" prefHeight="118.0" prefWidth="245.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -114,7 +114,7 @@
                   </LineChart>
                </children>
             </VBox>
-            <VBox fx:id="cb_vals" layoutX="114.0" layoutY="28.0" prefHeight="125.0" prefWidth="135.0">
+            <VBox fx:id="cb_vals" layoutX="114.0" layoutY="5.0" prefHeight="125.0" prefWidth="135.0">
                <children>
                   <Label fx:id="cb_height" alignment="TOP_LEFT" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
@@ -148,7 +148,7 @@
                   </Label>
                </children>
             </VBox>
-            <Joystick fx:id="joystick" layoutX="271.0" layoutY="170.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" />
+            <Joystick fx:id="joystick" layoutX="268.0" layoutY="156.0" prefHeight="200.0" prefWidth="200.0" />
 
          </children>
       </AnchorPane>

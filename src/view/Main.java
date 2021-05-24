@@ -23,7 +23,7 @@ public class Main extends Application {
         mainC.setMainVM(mainVM);
         mainVM.addObserver(mainC);
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 800, 500));
+        primaryStage.setScene(new Scene(root, 900, 550));
         primaryStage.show();
         mainC.init();
 

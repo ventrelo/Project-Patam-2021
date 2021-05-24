@@ -6,7 +6,7 @@ public class playableTS implements playable{
     int frame;
     TimeSeries timeSeries;
     @Override
-    public void play(int startFrame) {
+    public void play() {
 
     }
 

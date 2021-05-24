@@ -2,29 +2,23 @@ package view;
 
 
 
-import javafx.beans.binding.Bindings;
+
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.scene.Node;
-import javafx.scene.canvas.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import view.joystick.Joystick;
 import vm.mainVM;
-
-
-
 import java.io.File;
-
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,6 +28,8 @@ public class mainController implements Observer {
     VBox cb_graphs,cb_props,cb_vals;
     @FXML
     AnchorPane playback_bar;
+    @FXML
+    Slider js_playback_bar;
     @FXML
     Joystick joystick;
     @FXML
@@ -57,12 +53,14 @@ public class mainController implements Observer {
         cb_yaw.textProperty().bind(mainVM.yaw.asString());
         //Play Back bar label binding
         pb_speed.textProperty().bind(pb_speed_d.asString());
+        mainVM.playback_speed.bind(pb_speed_d);
+
     }
     public void init()
     {
 
     }
-    public void openFileExplorer(ActionEvent event) {
+    public void uploadXMLsett(ActionEvent event) {
 
         Stage stage = new Stage();
         FileChooser fil_chooser = new FileChooser();
@@ -84,14 +82,15 @@ public class mainController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        updateJoystick();
 
     }
-    public void updateJoystick(double aileron,double elevators,double rudder,double throttle)
+    public void updateJoystick()
     {
-        joystick.rudder.setValue(rudder);
-        joystick.throttle.setValue(throttle);
-        joystick.aileron.setValue(normalize(aileron));
-        joystick.elevators.setValue(normalize(elevators));
+        joystick.rudder.setValue(mainVM.rudder.getValue());
+        joystick.throttle.setValue(mainVM.throttle.getValue());
+        joystick.aileron.setValue(normalize(mainVM.aileron.getValue()));
+        joystick.elevators.setValue(normalize(mainVM.elevator.getValue()));
         joystick.update();
     }
     // This method receives a double range [-1,1] and converts it to double [25,175]
@@ -137,7 +136,7 @@ public class mainController implements Observer {
 
 
     public void selected(MouseEvent mouseEvent) {
-        final Node selected = (Node) mouseEvent.getSource();
+        Node selected = (Node) mouseEvent.getSource();
         String str = selected.getId();
         System.out.println(str);
     }
@@ -151,7 +150,9 @@ public class mainController implements Observer {
     }
     public void increase_speed()
     {
+        if(pb_speed_d.getValue()< 5) {
         pb_speed_d.setValue(pb_speed_d.getValue()+0.25);
+        }
     }
     public void decrease_speed()
     {

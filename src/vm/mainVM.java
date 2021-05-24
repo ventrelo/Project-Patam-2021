@@ -3,19 +3,19 @@ package vm;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import model.TimeSeries.TimeSeries;
 import model.XMLParserModel;
+import model.playableTS;
 
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class mainVM extends Observable implements Observer {
-   public XMLParserModel xmlParserModel = new XMLParserModel();
+   public XMLParserModel xmlParserModel;
    public HashMap xmlSettings;
-   private model.playable playable;
+   public model.playableTS playable;
+   private Timer t = new Timer();
+   //PlayBack properties
+   public DoubleProperty playback_speed;
+
 
     //Joystick properties
     public DoubleProperty aileron;
@@ -30,8 +30,7 @@ public class mainVM extends Observable implements Observer {
     public DoubleProperty roll;
     public DoubleProperty pitch;
     public DoubleProperty yaw;
-    //PlayBack properties
-    public DoubleProperty playback_speed;
+
 
   public mainVM(XMLParserModel xmlPM)
   {
@@ -79,8 +78,31 @@ public class mainVM extends Observable implements Observer {
    }
 
     public void pause() {
+      t.cancel();
     }
 
     public void play() {
+      t.cancel();
+      if(playable != null) {
+          TimeTaskPlay TTP = new TimeTaskPlay();
+          TTP.setPTS(playable);
+          t.scheduleAtFixedRate(TTP,0, (long) (1000/playback_speed.getValue()));
+      }
+    }
+
+    public playableTS getPlayable() {
+        return playable;
+    }
+}
+class TimeTaskPlay extends TimerTask {
+    playableTS PTS;
+
+    public void setPTS(playableTS PTS) {
+        this.PTS = PTS;
+    }
+
+    @Override
+    public void run() {
+        PTS.play();
     }
 }
