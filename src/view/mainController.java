@@ -21,6 +21,11 @@ import javafx.stage.Stage;
 import view.joystick.Joystick;
 import vm.mainVM;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -47,6 +52,7 @@ public class mainController implements Observer {
     public void setMainVM(mainVM vm)
     {
         this.mainVM = vm;
+        mainVM.parseXML("./Assets/xmlSettings");
         // Clock Board labels binding
         cb_height.textProperty().bind(mainVM.height.asString());
         cb_speed.textProperty().bind(mainVM.speed.asString());
@@ -74,8 +80,12 @@ public class mainController implements Observer {
         File file = fil_chooser.showOpenDialog(stage);
         Alert alert;
         if (file != null) {
-            mainVM.parseXML(file.getAbsolutePath());
-           System.out.println(mainVM.xmlSettings.keySet());
+            try {
+                Files.copy(Paths.get(file.getAbsolutePath()), Paths.get("./Assets/xmlSettings"),StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mainVM.parseXML("./Assets/xmlSettings");
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("XML settings upload successful");
         } else
