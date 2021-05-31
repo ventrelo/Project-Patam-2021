@@ -43,6 +43,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#uploadXMLsett" text="XML Settings" />
                         <MenuItem mnemonicParsing="false" onAction="#uploadCSVsett" text="CSV File" />
+                        <MenuItem mnemonicParsing="false" onAction="#uploadDetectorPath" text="AnamolyDetector" />
                     </items>
                   </Menu>
                </items>

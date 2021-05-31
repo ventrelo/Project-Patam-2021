@@ -11,9 +11,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.joystick.Joystick;
@@ -21,6 +23,7 @@ import vm.mainVM;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 public class mainController implements Observer {
 
@@ -72,6 +75,7 @@ public class mainController implements Observer {
         Alert alert;
         if (file != null) {
             mainVM.parseXML(file.getAbsolutePath());
+           System.out.println(mainVM.xmlSettings.keySet());
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("XML settings upload successful");
         } else
@@ -85,12 +89,13 @@ public class mainController implements Observer {
 
         Stage stage = new Stage();
         FileChooser fil_chooser = new FileChooser();
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML file (*.csv)","*.csv");
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV file (*.csv)","*.csv");
         fil_chooser.getExtensionFilters().add(extensionFilter);
         File file = fil_chooser.showOpenDialog(stage);
         Alert alert;
         if (file != null) {
             mainVM.setPlayable(file.getAbsolutePath());
+            js_playback_bar.maxProperty().setValue(mainVM.playable.MaxFrame);
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("CSV  upload successful");
         } else
@@ -100,11 +105,34 @@ public class mainController implements Observer {
         }
         alert.showAndWait();
     }
+    public void uploadDetectorPath(ActionEvent event)
+    {
+        Stage stage = new Stage();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("out"));
+        File file = directoryChooser.showDialog(stage);
+        Alert alert = null;
+        if (file != null) {
+            TextInputDialog dialog = new TextInputDialog("Enter the class name");
+            dialog.setTitle("Class name input");
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                mainVM.SetDetector(file.getAbsolutePath(), result.get());
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Anomaly Detector upload successful");
+            }
+        } else
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Anomaly Detector upload FAILED");
+
+        }
+        alert.showAndWait();
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         updateJoystick();
-
     }
     public void updateJoystick()
     {

@@ -7,10 +7,13 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import model.TimeSeries.TimeSeriesAnomalyDetector;
 import model.XMLParserModel;
 import model.playableTS;
 
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 
 public class mainVM extends Observable implements Observer {
@@ -18,6 +21,7 @@ public class mainVM extends Observable implements Observer {
     public HashMap xmlSettings;
     public model.playableTS playable;
     public Timer t;
+    public TimeSeriesAnomalyDetector detector;
    //PlayBack properties
     public DoubleProperty playback_speed;
     public StringProperty playback_time;
@@ -37,7 +41,7 @@ public class mainVM extends Observable implements Observer {
     public DoubleProperty pitch;
     public DoubleProperty yaw;
 
-
+    static double temp = 0.1;
   public mainVM(XMLParserModel xmlPM)
   {
      this.xmlParserModel = xmlPM;
@@ -69,27 +73,26 @@ public class mainVM extends Observable implements Observer {
       {
          xmlSettings = xmlParserModel.getHashMap();
       }
-      if(o == null) //This will be a future time series object
-      {
-          aileron = null;
-          elevator = null;
-          rudder = null;
-          throttle = null;
-          height = null;
-          speed = null;
-          direction = null;
-          roll = null;
-          pitch= null;
-          yaw = null;
-          setChanged();
-          notifyObservers();
-
-      }
       if(o==playable)
       {
+          //playable.values
           Platform.runLater(() -> {
               playback_time.setValue(ConvertTime(playback_frame.getValue()));
+              aileron.setValue(temp);
+              elevator.setValue(temp);
+              rudder.setValue(temp);
+              throttle.setValue(temp);
+              height.setValue(temp);
+              speed.setValue(temp);
+              direction.setValue(temp);
+              roll.setValue(temp);
+              pitch.setValue(temp);
+              yaw.setValue(temp);
+              setChanged();
+              notifyObservers();
           });
+
+
       }
    }
 
@@ -104,7 +107,6 @@ public class mainVM extends Observable implements Observer {
       this.t = new Timer();
       if(playable != null) {
           TimerTask TTP = new TimeTaskPlay(playable);
-          playable.MaxFrame=1000;
           t.scheduleAtFixedRate(TTP,0, (long) (1000/playback_speed.getValue()));
 
       }
@@ -136,7 +138,7 @@ public class mainVM extends Observable implements Observer {
             else
                 playback_frame.setValue(frame);
 
-            System.out.println(playback_frame.getValue());
+
 
         }
     }
@@ -161,6 +163,20 @@ public class mainVM extends Observable implements Observer {
             sec= String.valueOf(secs);
       return hour+':'+min+':'+sec;
 
+    }
+    public void SetDetector(String path, String nameClass)
+    {
+        try{
+            URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
+                    new URL("file://"+path)
+            });
+            System.out.println("file://"+path);
+            System.out.println(nameClass);
+            Class<?> c=urlClassLoader.loadClass(nameClass);
+            detector=(TimeSeriesAnomalyDetector) c.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
