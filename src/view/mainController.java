@@ -35,7 +35,7 @@ public class mainController implements Observer {
     @FXML
     Label cb_height,cb_speed,cb_dir,cb_roll,cb_pitch,cb_yaw;
     @FXML
-    Label pb_speed;
+    Label pb_speed, js_vid_time;
 
     DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
 
@@ -54,6 +54,8 @@ public class mainController implements Observer {
         //Play Back bar label binding
         pb_speed.textProperty().bind(pb_speed_d.asString());
         mainVM.playback_speed.bind(pb_speed_d);
+        js_playback_bar.valueProperty().bindBidirectional(mainVM.playback_frame);
+        js_vid_time.textProperty().bind(mainVM.playback_time);
 
     }
     public void init()
@@ -76,6 +78,25 @@ public class mainController implements Observer {
         {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("XML settings upload FAILED");
+        }
+        alert.showAndWait();
+    }
+    public void uploadCSVsett(ActionEvent event) {
+
+        Stage stage = new Stage();
+        FileChooser fil_chooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML file (*.csv)","*.csv");
+        fil_chooser.getExtensionFilters().add(extensionFilter);
+        File file = fil_chooser.showOpenDialog(stage);
+        Alert alert;
+        if (file != null) {
+            mainVM.setPlayable(file.getAbsolutePath());
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("CSV  upload successful");
+        } else
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("CSV upload FAILED");
         }
         alert.showAndWait();
     }

@@ -42,7 +42,7 @@
                   <Menu mnemonicParsing="false" text="Upload">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#uploadXMLsett" text="XML Settings" />
-                        <MenuItem mnemonicParsing="false" text="CSV File" />
+                        <MenuItem mnemonicParsing="false" onAction="#uploadCSVsett" text="CSV File" />
                     </items>
                   </Menu>
                </items>
