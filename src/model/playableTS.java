@@ -10,7 +10,8 @@ public class playableTS extends Observable implements playable  {
     double [] values;
     @Override
     public void play(int frame) {
-
+        setChanged();
+        notifyObservers();
     }
 
     public void setTimeSeries(String path) {
