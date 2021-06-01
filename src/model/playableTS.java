@@ -17,7 +17,7 @@ public class playableTS extends Observable implements playable  {
 
     public void setTimeSeries(String path) {
         this.timeSeries = new TimeSeries(path);
-        MaxFrame = timeSeries.getValues().size();
+        MaxFrame = timeSeries.getValues().size()-1;
     }
 
     @Override

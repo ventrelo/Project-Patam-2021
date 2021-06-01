@@ -7,10 +7,12 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import model.FlightSim;
 import model.TimeSeries.TimeSeriesAnomalyDetector;
 import model.XMLParserModel;
 import model.playableTS;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -22,6 +24,7 @@ public class mainVM extends Observable implements Observer {
     public model.playableTS playable;
     public Timer t;
     public TimeSeriesAnomalyDetector detector;
+    public FlightSim flightSim;
    //PlayBack properties
     public DoubleProperty playback_speed;
     public StringProperty playback_time;
@@ -41,7 +44,6 @@ public class mainVM extends Observable implements Observer {
     public DoubleProperty pitch;
     public DoubleProperty yaw;
 
-    static double temp = 0.1;
   public mainVM(XMLParserModel xmlPM)
   {
      this.xmlParserModel = xmlPM;
@@ -75,19 +77,21 @@ public class mainVM extends Observable implements Observer {
       }
       if(o==playable)
       {
+          Float [] value = playable.values;
           //playable.values
+
           Platform.runLater(() -> {
               playback_time.setValue(ConvertTime(playback_frame.getValue()));
-              aileron.setValue(temp);
-              elevator.setValue(temp);
-              rudder.setValue(temp);
-              throttle.setValue(temp);
-              height.setValue(temp);
-              speed.setValue(temp);
-              direction.setValue(temp);
-              roll.setValue(temp);
-              pitch.setValue(temp);
-              yaw.setValue(temp);
+              aileron.setValue(value[0]);
+              elevator.setValue(value[1]);
+              rudder.setValue(value[2]);
+              throttle.setValue(value[6]);
+              height.setValue(value[25]);
+              speed.setValue(value[24]);
+              direction.setValue(value[36]);
+              roll.setValue(value[28]);
+              pitch.setValue(value[29]);
+              yaw.setValue(value[20]);
               setChanged();
               notifyObservers();
           });
@@ -96,12 +100,14 @@ public class mainVM extends Observable implements Observer {
       }
    }
 
-    public void pause() {
+    public void pause(){
         if(t!=null)
             t.cancel();
+
     }
 
     public void play() {
+
       if(t!=null)
           t.cancel();
       this.t = new Timer();
@@ -118,6 +124,14 @@ public class mainVM extends Observable implements Observer {
     public void setPlayable(String path)
     {
         playable = new playableTS();
+        if (flightSim == null)
+        {
+            flightSim = new FlightSim(new File(path));
+        } else {
+            if (flightSim.getThread().isAlive())
+                flightSim.getThread().stop();
+        }
+
         playable.setTimeSeries(path);
         playable.addObserver(this);
     }
@@ -129,14 +143,17 @@ public class mainVM extends Observable implements Observer {
         @Override
         public void run() {
             int frame = playback_frame.getValue().intValue();
-            PTS.play(frame);
-            frame++;
+
             if(frame > playable.MaxFrame) {
                 pause();
                 playback_frame.setValue(0);
             }
-            else
+            else {
+
+                PTS.play(frame);
+                frame++;
                 playback_frame.setValue(frame);
+            }
 
 
 

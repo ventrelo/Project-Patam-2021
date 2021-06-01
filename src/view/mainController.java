@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -51,15 +52,18 @@ public class mainController implements Observer {
     public vm.mainVM mainVM;
     public void setMainVM(mainVM vm)
     {
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(5);
         this.mainVM = vm;
         mainVM.parseXML("./Assets/xmlSettings");
         // Clock Board labels binding
-        cb_height.textProperty().bind(mainVM.height.asString());
-        cb_speed.textProperty().bind(mainVM.speed.asString());
-        cb_dir.textProperty().bind(mainVM.direction.asString());
-        cb_roll.textProperty().bind(mainVM.roll.asString());
-        cb_pitch.textProperty().bind(mainVM.pitch.asString());
-        cb_yaw.textProperty().bind(mainVM.yaw.asString());
+        cb_height.textProperty().bind(mainVM.height.asString("%.4f"));
+        cb_speed.textProperty().bind(mainVM.speed.asString("%.4f"));
+        cb_dir.textProperty().bind(mainVM.direction.asString("%.4f"));
+        cb_roll.textProperty().bind(mainVM.roll.asString("%.4f"));
+        cb_pitch.textProperty().bind(mainVM.pitch.asString("%.4f"));
+        cb_yaw.textProperty().bind(mainVM.yaw.asString("%.4f"));
+
         //Play Back bar label binding
         pb_speed.textProperty().bind(pb_speed_d.asString());
         mainVM.playback_speed.bind(pb_speed_d);
