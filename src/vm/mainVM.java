@@ -123,11 +123,16 @@ public class mainVM extends Observable implements Observer {
     }
     public void setPlayable(String path)
     {
+        //Handle the time series
         playable = new playableTS();
         playback_frame.setValue(0);
         playback_time.setValue(ConvertTime(playback_frame.getValue()));
         playable.setTimeSeries(path);
         playable.addObserver(this);
+
+        //Handle the Flight gear
+        flightSim.openSocket();
+        flightSim.setValues(path);
     }
     class TimeTaskPlay extends TimerTask {
         playableTS PTS;
@@ -145,6 +150,7 @@ public class mainVM extends Observable implements Observer {
             else {
 
                 PTS.play(frame);
+                flightSim.play(frame);
                 frame++;
                 playback_frame.setValue(frame);
             }
