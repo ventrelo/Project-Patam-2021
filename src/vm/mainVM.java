@@ -13,7 +13,6 @@ import model.XMLParserModel;
 import model.playableTS;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -46,6 +45,7 @@ public class mainVM extends Observable implements Observer {
 
   public mainVM(XMLParserModel xmlPM)
   {
+      flightSim = new FlightSim();
      this.xmlParserModel = xmlPM;
      aileron= new SimpleDoubleProperty();
      elevator= new SimpleDoubleProperty();
@@ -103,7 +103,7 @@ public class mainVM extends Observable implements Observer {
     public void pause(){
         if(t!=null)
             t.cancel();
-
+        
     }
 
     public void play() {
@@ -124,14 +124,8 @@ public class mainVM extends Observable implements Observer {
     public void setPlayable(String path)
     {
         playable = new playableTS();
-        if (flightSim == null)
-        {
-            flightSim = new FlightSim(new File(path));
-        } else {
-            if (flightSim.getThread().isAlive())
-                flightSim.getThread().stop();
-        }
-
+        playback_frame.setValue(0);
+        playback_time.setValue(ConvertTime(playback_frame.getValue()));
         playable.setTimeSeries(path);
         playable.addObserver(this);
     }

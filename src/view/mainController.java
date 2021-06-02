@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -45,6 +46,8 @@ public class mainController implements Observer {
     Label cb_height,cb_speed,cb_dir,cb_roll,cb_pitch,cb_yaw;
     @FXML
     Label pb_speed, js_vid_time;
+    @FXML
+    LineChart<DoubleProperty,DoubleProperty> graph1,graph2;
 
     DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
 

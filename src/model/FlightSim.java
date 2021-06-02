@@ -2,53 +2,27 @@ package model;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class FlightSim {
-    File file;
+public class FlightSim{
+    Socket socket;
+    List<String> values;
+    boolean ready;
 
-    public Thread getThread() {
-        return thread;
-    }
-
-    Thread thread;
-    SocketOpen socketOpen;
-
-    public FlightSim(File file)
+    public boolean openSocket()
     {
-        this.file = file;
-        socketOpen = new SocketOpen();
-        socketOpen.setPath(file.getAbsolutePath());
-    }
-    public void start()
-    {
-        thread = new Thread(socketOpen);
-        thread.start();
-    }
-    public void stop() throws InterruptedException {
-        thread.wait();
-    }
-    public void Continue()
-    {
-        thread.notify();
-    }
-
-}
-class SocketOpen implements Runnable
-{
-    String path;
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-
-    @Override
-    public void run() {
-        Socket fg= null;
         try {
-            fg = new Socket("localhost", 5400);
+            socket=new Socket("localhost", 5400);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+    }
+    public void setValues(String path)
+    {
         BufferedReader in= null;
         try {
             in = new BufferedReader(new FileReader(path));
@@ -57,10 +31,11 @@ class SocketOpen implements Runnable
         }
         PrintWriter out= null;
         try {
-            out = new PrintWriter(fg.getOutputStream());
+            out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        values = new ArrayList<>();
         String line = null;
         while(true) {
             try {
@@ -70,20 +45,21 @@ class SocketOpen implements Runnable
             }
             out.println(line);
             out.flush();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            values.add(line);
+
         }
         out.close();
         try {
             in.close();
-            fg.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
     }
+
+
+
 }
+
+
