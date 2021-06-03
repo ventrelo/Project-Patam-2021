@@ -1,10 +1,13 @@
 package view;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.XMLParserModel;
 import vm.mainVM;
 
@@ -23,16 +26,25 @@ public class Main extends Application {
         mainC.setMainVM(mainVM);
         mainVM.addObserver(mainC);
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 800, 500));
+        primaryStage.setScene(new Scene(root, 900, 550));
         primaryStage.show();
         mainC.init();
 
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent e) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
 
 
 
 
 
     }
+
 
 
     public static void main(String[] args) {

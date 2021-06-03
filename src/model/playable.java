@@ -1,6 +1,6 @@
 package model;
 
 public interface playable {
-     void play(int time);
+     void play(int frame);
      int pause();
 }

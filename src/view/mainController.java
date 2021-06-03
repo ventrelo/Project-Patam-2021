@@ -2,28 +2,35 @@ package view;
 
 
 
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.scene.Node;
-import javafx.scene.canvas.*;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import view.joystick.Joystick;
 import vm.mainVM;
-
-
-
 import java.io.File;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 public class mainController implements Observer {
 
@@ -32,28 +39,46 @@ public class mainController implements Observer {
     @FXML
     AnchorPane playback_bar;
     @FXML
+    Slider js_playback_bar;
+    @FXML
     Joystick joystick;
     @FXML
     Label cb_height,cb_speed,cb_dir,cb_roll,cb_pitch,cb_yaw;
+    @FXML
+    Label pb_speed, js_vid_time;
+    @FXML
+    LineChart<DoubleProperty,DoubleProperty> graph1,graph2;
+
+    DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
 
 
     public vm.mainVM mainVM;
     public void setMainVM(mainVM vm)
     {
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(5);
         this.mainVM = vm;
+        mainVM.parseXML("./Assets/xmlSettings");
         // Clock Board labels binding
-        cb_height.textProperty().bind(mainVM.height.asString());
-        cb_speed.textProperty().bind(mainVM.speed.asString());
-        cb_dir.textProperty().bind(mainVM.direction.asString());
-        cb_roll.textProperty().bind(mainVM.roll.asString());
-        cb_pitch.textProperty().bind(mainVM.pitch.asString());
-        cb_yaw.textProperty().bind(mainVM.yaw.asString());
+        cb_height.textProperty().bind(mainVM.height.asString("%.4f"));
+        cb_speed.textProperty().bind(mainVM.speed.asString("%.4f"));
+        cb_dir.textProperty().bind(mainVM.direction.asString("%.4f"));
+        cb_roll.textProperty().bind(mainVM.roll.asString("%.4f"));
+        cb_pitch.textProperty().bind(mainVM.pitch.asString("%.4f"));
+        cb_yaw.textProperty().bind(mainVM.yaw.asString("%.4f"));
+
+        //Play Back bar label binding
+        pb_speed.textProperty().bind(pb_speed_d.asString());
+        mainVM.playback_speed.bind(pb_speed_d);
+        js_playback_bar.valueProperty().bindBidirectional(mainVM.playback_frame);
+        js_vid_time.textProperty().bind(mainVM.playback_time);
+
     }
     public void init()
     {
 
     }
-    public void openFileExplorer(ActionEvent event) {
+    public void uploadXMLsett(ActionEvent event) {
 
         Stage stage = new Stage();
         FileChooser fil_chooser = new FileChooser();
@@ -62,7 +87,12 @@ public class mainController implements Observer {
         File file = fil_chooser.showOpenDialog(stage);
         Alert alert;
         if (file != null) {
-            mainVM.parseXML(file.getAbsolutePath());
+            try {
+                Files.copy(Paths.get(file.getAbsolutePath()), Paths.get("./Assets/xmlSettings"),StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mainVM.parseXML("./Assets/xmlSettings");
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("XML settings upload successful");
         } else
@@ -72,17 +102,61 @@ public class mainController implements Observer {
         }
         alert.showAndWait();
     }
+    public void uploadCSVsett(ActionEvent event) {
+
+        Stage stage = new Stage();
+        FileChooser fil_chooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV file (*.csv)","*.csv");
+        fil_chooser.getExtensionFilters().add(extensionFilter);
+        File file = fil_chooser.showOpenDialog(stage);
+        Alert alert;
+        if (file != null) {
+            mainVM.setPlayable(file.getAbsolutePath());
+            js_playback_bar.maxProperty().setValue(mainVM.playable.MaxFrame);
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("CSV  upload successful");
+        } else
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("CSV upload FAILED");
+        }
+        alert.showAndWait();
+    }
+    public void uploadDetectorPath(ActionEvent event)
+    {
+        Stage stage = new Stage();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("out"));
+        File file = directoryChooser.showDialog(stage);
+        Alert alert = null;
+        if (file != null) {
+            TextInputDialog dialog = new TextInputDialog("Enter the class name");
+            dialog.setTitle("Class name input");
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                mainVM.SetDetector(file.getAbsolutePath(), result.get());
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Anomaly Detector upload successful");
+            }
+        } else
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Anomaly Detector upload FAILED");
+
+        }
+        alert.showAndWait();
+    }
 
     @Override
     public void update(Observable o, Object arg) {
-
+        updateJoystick();
     }
-    public void updateJoystick(double aileron,double elevators,double rudder,double throttle)
+    public void updateJoystick()
     {
-        joystick.rudder.setValue(rudder);
-        joystick.throttle.setValue(throttle);
-        joystick.aileron.setValue(normalize(aileron));
-        joystick.elevators.setValue(normalize(elevators));
+        joystick.rudder.setValue(mainVM.rudder.getValue());
+        joystick.throttle.setValue(mainVM.throttle.getValue());
+        joystick.aileron.setValue(normalize(mainVM.aileron.getValue()));
+        joystick.elevators.setValue(normalize(mainVM.elevator.getValue()));
         joystick.update();
     }
     // This method receives a double range [-1,1] and converts it to double [25,175]
@@ -128,8 +202,28 @@ public class mainController implements Observer {
 
 
     public void selected(MouseEvent mouseEvent) {
-        final Node selected = (Node) mouseEvent.getSource();
+        Node selected = (Node) mouseEvent.getSource();
         String str = selected.getId();
         System.out.println(str);
+    }
+    public void play()
+    {
+        mainVM.play();
+    }
+    public void pause()
+    {
+        mainVM.pause();
+    }
+    public void increase_speed()
+    {
+        if(pb_speed_d.getValue()< 5) {
+        pb_speed_d.setValue(pb_speed_d.getValue()+0.25);
+        }
+    }
+    public void decrease_speed()
+    {
+        if(pb_speed_d.getValue()>0.25) {
+            pb_speed_d.setValue(pb_speed_d.getValue() - 0.25);
+        }
     }
 }

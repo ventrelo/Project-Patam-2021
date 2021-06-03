@@ -2,12 +2,22 @@ package model;
 
 import model.TimeSeries.TimeSeries;
 
-public class playableTS implements playable{
-    int frame;
-    TimeSeries timeSeries;
-    @Override
-    public void play(int startFrame) {
+import java.util.Observable;
 
+public class playableTS extends Observable implements playable  {
+    public int MaxFrame;
+    TimeSeries timeSeries;
+    public Float[] values;
+    @Override
+    public void play(int frame) {
+        values = timeSeries.getValues().get(frame);
+        setChanged();
+        notifyObservers();
+    }
+
+    public void setTimeSeries(String path) {
+        this.timeSeries = new TimeSeries(path);
+        MaxFrame = timeSeries.getValues().size()-1;
     }
 
     @Override

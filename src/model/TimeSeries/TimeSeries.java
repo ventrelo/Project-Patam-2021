@@ -63,6 +63,19 @@ public class TimeSeries {
 		scanner.close();
 	}
 
+	public int getIndexOfHeader(String header) { return headers.indexOf(header); }
+
+	public float[] getValuesOfHeader(String header) {
+		float[] headerValues = new float[values.size()];
+		int headerIndex = getIndexOfHeader(header);
+
+		for(int i = 0; i < values.size(); i++) {
+			headerValues[i] = values.get(i)[headerIndex];
+		}
+
+		return headerValues;
+	}
+
 	public List<String> getHeaders() {
 		return headers;
 	}
