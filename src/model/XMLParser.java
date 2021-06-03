@@ -7,14 +7,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class XMLParser {
     public static HashMap decodeXML(String xml_path) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        HashMap<String, XmlProperty> xml_properties = new HashMap<String, XmlProperty>();
+        String xml_root_element_tag = "config";
+        String xml_min_element_tag = "min";
+        String xml_max_element_tag = "max";
+        String xml_index_element_tag = "index";
         DocumentBuilder db = null;
-        String xml_properties_tag_name = "chunk";
-        HashMap<String, HashMap<String, String>> xml_properties = new HashMap();
+        Document doc = null;
 
         try {
             db = dbf.newDocumentBuilder();
@@ -22,7 +27,6 @@ public class XMLParser {
             e.printStackTrace();
             return null;
         }
-        Document doc = null;
 
         try {
             doc = db.parse(new File(xml_path));
@@ -32,56 +36,78 @@ public class XMLParser {
         }
 
         doc.getDocumentElement().normalize();
-        NodeList properties = doc.getElementsByTagName(xml_properties_tag_name);
+        NodeList entries = doc.getElementsByTagName("*");
+        int first_depth_property_counter = 0;
 
-        for (int i = 0; i < properties.getLength(); i++) {
-            Node property = properties.item(i);
-            Element element = (Element) property;
-            xml_properties.putAll(getElementAttributes(element));
+        for (int i=0; i<entries.getLength(); i++) {
+            Element element = (Element) entries.item(i);
+
+            if (!element.getNodeName().equals(xml_root_element_tag) && getElementDepth(element) == 1) {
+                XmlProperty prop = new XmlProperty(
+                        Double.parseDouble(element.getElementsByTagName(xml_min_element_tag).item(0).getTextContent()),
+                        Double.parseDouble(element.getElementsByTagName(xml_max_element_tag).item(0).getTextContent()),
+                        Integer.parseInt(element.getElementsByTagName(xml_index_element_tag).item(0).getTextContent())
+                );
+
+                xml_properties.put(element.getNodeName(), prop);
+                first_depth_property_counter++;
+            }
         }
 
         return xml_properties;
     }
 
-    private static HashMap<String, HashMap<String, String>> getElementAttributes(Element element) {
-        String name, type, format, node;
+    public static int getElementDepth(Element element) {
+        Node parent = element.getParentNode();
+        int depth = 0;
 
-        if (element.getElementsByTagName("name").getLength() > 0) {
-            name = element.getElementsByTagName("name").item(0).getTextContent();
-        } else {
-            name = "N/A";
+        while (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
+            depth++;
+            parent = parent.getParentNode();
         }
 
-        if (element.getElementsByTagName("type").getLength() > 0) {
-            type = element.getElementsByTagName("type").item(0).getTextContent();
-        } else {
-            type = "N/A";
+        return depth;
+    }
+
+    public static class XmlProperty {
+        private double min;
+        private double max;
+        private int index;
+
+        XmlProperty(double min, double max, int index) {
+            this.min = min;
+            this.max = max;
+            this.index = index;
         }
 
-        if (element.getElementsByTagName("format").getLength() > 0) {
-            format = element.getElementsByTagName("format").item(0).getTextContent();
-        } else {
-            format = "N/A";
+        public double getMin() {
+            return min;
         }
 
-        if (element.getElementsByTagName("node").getLength() > 0) {
-            node = element.getElementsByTagName("node").item(0).getTextContent();
-        } else {
-            node = "N/A";
+        public void setMin(double min) {
+            this.min = min;
         }
 
-        String finalName = name;
-        String finalType = type;
-        String finalFormat = format;
-        String finalNode = node;
+        public double getMax() {
+            return max;
+        }
 
-        HashMap<String, String> innerHashmap = new HashMap<>();
-        innerHashmap.put("name", finalName);
-        innerHashmap.put("type", finalType);
-        innerHashmap.put("format", finalFormat);
+        public void setMax(double max) {
+            this.max = max;
+        }
 
-        HashMap<String, HashMap<String, String>> outerHashmap = new HashMap<String, HashMap<String, String>>();
-        outerHashmap.put(finalNode, innerHashmap);
-        return outerHashmap;
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public void print() {
+            System.out.println("min: " + min);
+            System.out.println("max: " + min);
+            System.out.println("index: " + index);
+        }
     }
 }
