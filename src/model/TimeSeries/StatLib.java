@@ -7,6 +7,10 @@ public class StatLib {
 
 	// simple average
 	public static float avg(float[] x){
+		if (x.length == 0) {
+			return 0;
+		}
+
 		float sum=0;
 		for(float num : x) sum += num;
 		return sum/x.length;
@@ -14,6 +18,10 @@ public class StatLib {
 
 	// returns the variance of X and Y
 	public static float var(float[] x){
+		if (x.length == 0) {
+			return 0;
+		}
+
 		float u = avg(x);
 		float[] xTemp = new float[x.length];
 		for (int i=0;i<xTemp.length;i++)
