@@ -1,10 +1,26 @@
 package model.TimeSeries;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 	List<CorrelatedFeatures> corrFeat;
+	float threshold = 0.9f;
+
+	SimpleAnomalyDetector(){}
+
+	SimpleAnomalyDetector(float threshold) {
+		this.threshold = threshold;
+	}
+
+	public float getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(float threshold) {
+		this.threshold = threshold;
+	}
 
 	@Override
 	public void learnNormal(TimeSeries ts) {
@@ -26,7 +42,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 					maxIndex = j;
 				}
 			}
-			if(maxCorr > 0.9) // Features will be definitely correlated if max is higher than 0.9,this is changeable
+			if(maxCorr > threshold) // Features will be definitely correlated if max is higher than 0.9,this is changeable
 			{
 				String f1 = header.get(i);
 				String f2 = header.get(maxIndex);
