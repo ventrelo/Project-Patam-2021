@@ -21,7 +21,6 @@ public class ZScore implements TimeSeriesAnomalyDetector{
 
         for(String header: ts.getHeaders()) {
             float[] headerValues = ts.getValuesOfHeader(header);
-            float standardDeviation = (float) Math.sqrt(StatLib.var(headerValues));
 
             for(int i = 0; i < headerValues.length; i++) {
                 float[] currentlyUsedValues = new float[i];
@@ -30,7 +29,11 @@ public class ZScore implements TimeSeriesAnomalyDetector{
                 System.arraycopy(headerValues, 0, currentlyUsedValues, 0, i);
                 float currentX = headerValues[i];
                 float average = StatLib.avg(currentlyUsedValues);
-                currentZScore = Math.abs(currentX - average) / standardDeviation;
+                float standardDeviation = (float) Math.sqrt(StatLib.var(currentlyUsedValues));
+
+                if (standardDeviation != 0) {
+                    currentZScore = Math.abs(currentX - average) / standardDeviation;
+                }
 
                 if(currentZScore > maxZScores.get(headerCounter)) {
                     maxZScores.set(headerCounter, currentZScore);
@@ -49,7 +52,6 @@ public class ZScore implements TimeSeriesAnomalyDetector{
 
         for(String header: ts.getHeaders()) {
             float[] headerValues = ts.getValuesOfHeader(header);
-            float standardDeviation = (float) Math.sqrt(StatLib.var(headerValues));
 
             for(int i = 0; i < headerValues.length; i++) {
                 float[] currentlyUsedValues = new float[i];
@@ -58,7 +60,11 @@ public class ZScore implements TimeSeriesAnomalyDetector{
                 System.arraycopy(headerValues, 0, currentlyUsedValues, 0, i);
                 float currentX = headerValues[i];
                 float average = StatLib.avg(currentlyUsedValues);
-                currentZScore = Math.abs(currentX - average) / standardDeviation;
+                float standardDeviation = (float) Math.sqrt(StatLib.var(currentlyUsedValues));
+
+                if (standardDeviation != 0) {
+                    currentZScore = Math.abs(currentX - average) / standardDeviation;
+                }
 
                 if(currentZScore > maxZScores.get(headerCounter)) {
                     anomalies.add(new AnomalyReport(header, i));
