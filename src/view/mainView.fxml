@@ -97,12 +97,12 @@
             </VBox>
             <VBox fx:id="cb_graphs" layoutY="167.0" prefHeight="300.0" prefWidth="245.0">
                <children>
-                  <LineChart fx:id="graph1" prefHeight="150.0" prefWidth="245.0">
+                  <LineChart fx:id="graph1" animated="false" createSymbols="false" prefHeight="150.0" prefWidth="245.0">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <NumberAxis minorTickCount="0" minorTickVisible="false" side="BOTTOM" tickMarkVisible="false" upperBound="0.0" fx:id="xAxisT" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis fx:id="yAxisT" minorTickVisible="false" side="LEFT" upperBound="0.0" />
                     </yAxis>
                   </LineChart>
                   <LineChart fx:id="graph2" prefHeight="118.0" prefWidth="245.0">

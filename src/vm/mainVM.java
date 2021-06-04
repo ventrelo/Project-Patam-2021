@@ -7,8 +7,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.chart.XYChart;
 import model.FlightSim;
 import model.TimeSeries.TimeSeriesAnomalyDetector;
+import model.XMLParser;
 import model.XMLParserModel;
 import model.playableTS;
 
@@ -19,7 +21,7 @@ import java.util.*;
 
 public class mainVM extends Observable implements Observer {
     public XMLParserModel xmlParserModel;
-    public HashMap xmlSettings;
+    public HashMap<String, XMLParser.XmlProperty> xmlSettings;
     public model.playableTS playable;
     public Timer t;
     public TimeSeriesAnomalyDetector detector;
@@ -134,6 +136,19 @@ public class mainVM extends Observable implements Observer {
         flightSim.openSocket();
         flightSim.setValues(path);
     }
+
+    public void fillSeries(XYChart.Series series, String str) {
+      int index = xmlSettings.get(str).getIndex();
+      List<Float[]> vals =playable.timeSeries.getValues();
+      series.getData().clear();
+      for(int i=0 ;i < playback_frame.getValue();i++)
+      {
+          //if(i%10==0)
+            series.getData().add(new XYChart.Data(i,vals.get(i)[index]));
+
+      }
+    }
+
     class TimeTaskPlay extends TimerTask {
         playableTS PTS;
         public TimeTaskPlay(playableTS playableTS) {

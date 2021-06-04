@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -19,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.XMLParser;
 import view.joystick.Joystick;
 import vm.mainVM;
 import java.io.File;
@@ -47,10 +50,14 @@ public class mainController implements Observer {
     @FXML
     Label pb_speed, js_vid_time;
     @FXML
-    LineChart<DoubleProperty,DoubleProperty> graph1,graph2;
+    LineChart<Number,Number> graph1,graph2;
+    @FXML
+    NumberAxis xAxisT,yAxisT;
 
     DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
-
+    boolean updateGraphs = false;
+    String str = null;
+    XYChart.Series seriesTime = new XYChart.Series();
 
     public vm.mainVM mainVM;
     public void setMainVM(mainVM vm)
@@ -149,7 +156,13 @@ public class mainController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
         updateJoystick();
+        if(updateGraphs == true)
+        {
+            fillGraphs(str);
+        }
+
     }
     public void updateJoystick()
     {
@@ -203,8 +216,10 @@ public class mainController implements Observer {
 
     public void selected(MouseEvent mouseEvent) {
         Node selected = (Node) mouseEvent.getSource();
-        String str = selected.getId();
-        System.out.println(str);
+        updateGraphs = true;
+        str = selected.getId();
+        if(mainVM.playable != null)
+            fillGraphs(str);
     }
     public void play()
     {
@@ -226,4 +241,47 @@ public class mainController implements Observer {
             pb_speed_d.setValue(pb_speed_d.getValue() - 0.25);
         }
     }
+    public void fillGraphs(String str)
+    {
+       fillTimeGraph(str);
+    }
+
+    private void fillTimeGraph(String str) {
+
+        XYChart.Series seriesTime = new XYChart.Series();
+        mainVM.fillSeries(seriesTime,str);
+        graph1.getData().clear();
+        graph1.getData().add(seriesTime);
+    }
+    private void updateGraphs(){
+        Double frame = mainVM.playback_frame.getValue();
+        double value;
+        switch (str){
+            case "cb_height" :
+                value = mainVM.height.get();
+                break;
+            case "cb_speed" :
+                value = mainVM.speed.get();
+                break;
+            case "cb_dir" :
+                value = mainVM.direction.get();
+                break;
+            case "cb_roll" :
+                value = mainVM.roll.get();
+                break;
+            case "cb_pitch" :
+                value = mainVM.pitch.get();
+                break;
+            case "cb_yaw" :
+                value = mainVM.yaw.get();
+                break;
+            default:
+                value=0;
+        }
+        seriesTime.getData().add(new XYChart.Data(frame,value));
+    }
+
+
+
+
 }
