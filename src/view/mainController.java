@@ -17,13 +17,17 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.XMLParser;
 import view.joystick.Joystick;
 import vm.mainVM;
+
+import javax.swing.text.LabelView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -215,12 +219,24 @@ public class mainController implements Observer {
 
 
     public void selected(MouseEvent mouseEvent) {
-        Node selected = (Node) mouseEvent.getSource();
+        Label selected = (Label) mouseEvent.getSource();
+        clearLabels();
+        selected.setTextFill(Color.color(0,0,1));
         updateGraphs = true;
         str = selected.getId();
         if(mainVM.playable != null)
             fillGraphs(str);
     }
+
+    private void clearLabels() {
+        cb_height.setTextFill(Color.color(0,0,0));
+        cb_pitch.setTextFill(Color.color(0,0,0));
+        cb_roll.setTextFill(Color.color(0,0,0));
+        cb_dir.setTextFill(Color.color(0,0,0));
+        cb_speed.setTextFill(Color.color(0,0,0));
+        cb_yaw.setTextFill(Color.color(0,0,0));;
+    }
+
     public void play()
     {
         mainVM.play();
