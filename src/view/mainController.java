@@ -56,7 +56,7 @@ public class mainController implements Observer {
     @FXML
     LineChart<Number,Number> graph1,graph2;
     @FXML
-    NumberAxis xAxisT,yAxisT;
+    NumberAxis xAxisT,yAxisT,xAxisC,yAxisC;
 
     DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
     boolean updateGraphs = false;
@@ -259,43 +259,33 @@ public class mainController implements Observer {
     }
     public void fillGraphs(String str)
     {
-       fillTimeGraph(str);
+        fillCorrolationGraph(str);
+        fillTimeGraph(str);
+    }
+
+    private void fillCorrolationGraph(String str) {
+        XYChart.Series seriesTime = new XYChart.Series();
+        mainVM.fillSeriesC(seriesTime,str);
+        graph2.getData().clear();
+        graph2.getData().add(seriesTime);
     }
 
     private void fillTimeGraph(String str) {
 
         XYChart.Series seriesTime = new XYChart.Series();
-        mainVM.fillSeries(seriesTime,str);
+        mainVM.fillSeriesT(seriesTime,str);
         graph1.getData().clear();
         graph1.getData().add(seriesTime);
     }
-    private void updateGraphs(){
-        Double frame = mainVM.playback_frame.getValue();
-        double value;
-        switch (str){
-            case "cb_height" :
-                value = mainVM.height.get();
-                break;
-            case "cb_speed" :
-                value = mainVM.speed.get();
-                break;
-            case "cb_dir" :
-                value = mainVM.direction.get();
-                break;
-            case "cb_roll" :
-                value = mainVM.roll.get();
-                break;
-            case "cb_pitch" :
-                value = mainVM.pitch.get();
-                break;
-            case "cb_yaw" :
-                value = mainVM.yaw.get();
-                break;
-            default:
-                value=0;
-        }
-        seriesTime.getData().add(new XYChart.Data(frame,value));
+    public void learnN()
+    {
+        mainVM.learnN();
     }
+    public void detectAno()
+    {
+
+    }
+    
 
 
 

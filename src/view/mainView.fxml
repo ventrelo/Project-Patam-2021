@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -52,7 +51,7 @@
       </MenuBar>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="500.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="playback_bar" layoutX="268.0" layoutY="417.0">
+            <AnchorPane fx:id="playback_bar" layoutX="268.0" layoutY="417.0" prefHeight="90.0" prefWidth="258.0">
                <children>
                   <Slider fx:id="js_playback_bar" blockIncrement="1.0" layoutX="3.0" layoutY="30.0" prefHeight="14.0" prefWidth="200.0" />
                   <Label fx:id="js_vid_time" layoutX="203.0" layoutY="25.0" prefHeight="25.0" prefWidth="55.0" text="00:00:00">
@@ -65,6 +64,8 @@
                   <Label fx:id="pb_speed" layoutX="176.0" layoutY="1.0" prefHeight="27.0" prefWidth="55.0" text="1.00" />
                   <Button fx:id="pb_minus" layoutX="150.0" layoutY="2.0" mnemonicParsing="false" onAction="#decrease_speed" prefHeight="25.0" prefWidth="26.0" text="-" />
                   <Button fx:id="pb_plus" layoutX="204.0" layoutY="2.0" mnemonicParsing="false" onAction="#increase_speed" prefHeight="25.0" prefWidth="26.0" text="+" />
+                  <Button layoutX="5.0" layoutY="51.0" mnemonicParsing="false" onAction="#learnN" text="Learn Normal" />
+                  <Button layoutX="103.0" layoutY="51.0" mnemonicParsing="false" onAction="#detectAno" text="Detect" />
                </children>
             </AnchorPane>
             <VBox fx:id="cb_props" layoutX="14.0" layoutY="5.0" prefHeight="125.0" prefWidth="100.0">
@@ -97,7 +98,7 @@
             </VBox>
             <VBox fx:id="cb_graphs" layoutY="167.0" prefHeight="300.0" prefWidth="245.0">
                <children>
-                  <LineChart fx:id="graph1" animated="false" createSymbols="false" prefHeight="150.0" prefWidth="245.0">
+                  <LineChart fx:id="graph1" animated="false" createSymbols="false" prefHeight="150.0" prefWidth="245.0" title="TimeSteps">
                     <xAxis>
                       <NumberAxis minorTickCount="0" minorTickVisible="false" side="BOTTOM" tickMarkVisible="false" upperBound="0.0" fx:id="xAxisT" />
                     </xAxis>
@@ -105,12 +106,12 @@
                       <NumberAxis fx:id="yAxisT" minorTickVisible="false" side="LEFT" upperBound="0.0" />
                     </yAxis>
                   </LineChart>
-                  <LineChart fx:id="graph2" prefHeight="118.0" prefWidth="245.0">
+                  <LineChart fx:id="graph2" animated="false" createSymbols="false" prefHeight="150.0" prefWidth="245.0" title="Correlation">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis minorTickCount="0" minorTickVisible="false" side="BOTTOM" tickMarkVisible="false" upperBound="0.0" fx:id="xAxisC" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis fx:id="yAxisC" minorTickVisible="false" side="LEFT" upperBound="0.0" />
                      </yAxis>
                   </LineChart>
                </children>

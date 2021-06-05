@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.chart.XYChart;
 import model.FlightSim;
+import model.TimeSeries.CorrelatedFeatures;
+import model.TimeSeries.SimpleAnomalyDetector;
 import model.TimeSeries.TimeSeriesAnomalyDetector;
 import model.XMLParser;
 import model.XMLParserModel;
@@ -25,6 +27,7 @@ public class mainVM extends Observable implements Observer {
     public model.playableTS playable;
     public Timer t;
     public TimeSeriesAnomalyDetector detector;
+    SimpleAnomalyDetector helper = new SimpleAnomalyDetector(0.25f);
     public FlightSim flightSim;
    //PlayBack properties
     public DoubleProperty playback_speed;
@@ -130,6 +133,7 @@ public class mainVM extends Observable implements Observer {
         playback_frame.setValue(0);
         playback_time.setValue(ConvertTime(playback_frame.getValue()));
         playable.setTimeSeries(path);
+        helper.learnNormal(playable.timeSeries);
         playable.addObserver(this);
 
         //Handle the Flight gear
@@ -137,7 +141,7 @@ public class mainVM extends Observable implements Observer {
         flightSim.setValues(path);
     }
 
-    public void fillSeries(XYChart.Series series, String str) {
+    public void fillSeriesT(XYChart.Series series, String str) {
       int index = xmlSettings.get(str).getIndex();
       List<Float[]> vals =playable.timeSeries.getValues();
       series.getData().clear();
@@ -147,6 +151,51 @@ public class mainVM extends Observable implements Observer {
             series.getData().add(new XYChart.Data(i,vals.get(i)[index]));
 
       }
+    }
+
+    public void learnN() {
+      if(detector != null && playable.timeSeries != null)
+      {
+          detector.learnNormal(playable.timeSeries);
+      }
+    }
+
+    public void fillSeriesC(XYChart.Series series, String str) {
+        int indexMain = xmlSettings.get(str).getIndex();
+        int indexCor = -1;
+        String fetur1 = playable.timeSeries.getHeaders().get(indexMain);
+        String fetur2 = null;
+
+        for(CorrelatedFeatures cor : helper.getNormalModel())
+        {
+            if(fetur1.equals(cor.feature1))
+            {
+                fetur2 = cor.feature2;
+                indexCor++;
+                break;
+            }
+
+
+        }
+        if (fetur2 != null
+        ) {
+
+
+            for (String string : playable.timeSeries.getHeaders()) {
+                if (fetur2.equals(string)) {
+                    break;
+                } else indexCor++;
+            }
+
+            List<Float[]> vals = playable.timeSeries.getValues();
+            series.getData().clear();
+            if (indexCor != -1)
+                for (int i = 0; i < playback_frame.getValue(); i++) {
+                    //if(i%10==0)
+                    series.getData().add(new XYChart.Data(vals.get(i)[indexCor], vals.get(i)[indexMain]));
+
+                }
+        }
     }
 
     class TimeTaskPlay extends TimerTask {
@@ -202,8 +251,6 @@ public class mainVM extends Observable implements Observer {
             URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
                     new URL("file://"+path)
             });
-            System.out.println("file://"+path);
-            System.out.println(nameClass);
             Class<?> c=urlClassLoader.loadClass(nameClass);
             detector=(TimeSeriesAnomalyDetector) c.newInstance();
         } catch (Exception e) {
