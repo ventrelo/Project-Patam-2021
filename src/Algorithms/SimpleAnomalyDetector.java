@@ -10,9 +10,9 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 	List<CorrelatedFeatures> corrFeat;
 	float threshold = 0.9f;
 
-	public SimpleAnomalyDetector(){}
+	SimpleAnomalyDetector(){}
 
-	public SimpleAnomalyDetector(float threshold) {
+	SimpleAnomalyDetector(float threshold) {
 		this.threshold = threshold;
 	}
 
