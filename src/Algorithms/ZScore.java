@@ -47,8 +47,6 @@ public class ZScore implements TimeSeriesAnomalyDetector {
 
             headerCounter++;
         }
-
-        System.out.println("learning ended");
     }
 
     public List<AnomalyReport> detect(TimeSeries ts) {
@@ -79,7 +77,46 @@ public class ZScore implements TimeSeriesAnomalyDetector {
             headerCounter++;
         }
 
-        System.out.println("detection ended");
         return anomalies;
+    }
+
+    public static float learnNormalSingleton(float[] headerValues) {
+        float maxZscore = 0;
+
+        for(int i = 0; i < headerValues.length; i++) {
+            float[] currentlyUsedValues = new float[i];
+            float currentZScore = 0;
+
+            System.arraycopy(headerValues, 0, currentlyUsedValues, 0, i);
+            float currentX = headerValues[i];
+            float average = StatLib.avg(currentlyUsedValues);
+            float standardDeviation = (float) Math.sqrt(StatLib.var(currentlyUsedValues));
+
+            if (standardDeviation != 0) {
+                currentZScore = Math.abs(currentX - average) / standardDeviation;
+            }
+
+            if(currentZScore > maxZscore) {
+                maxZscore = currentZScore;
+            }
+        }
+
+        return maxZscore;
+    }
+
+    public static float detectSingleton(float[] headerValues, int i) {
+        float currentZScore = 0;
+        float[] currentlyUsedValues = new float[i];
+
+        System.arraycopy(headerValues, 0, currentlyUsedValues, 0, i);
+        float currentX = headerValues[i];
+        float average = StatLib.avg(currentlyUsedValues);
+        float standardDeviation = (float) Math.sqrt(StatLib.var(currentlyUsedValues));
+
+        if (standardDeviation != 0) {
+            currentZScore = Math.abs(currentX - average) / standardDeviation;
+        }
+
+        return currentZScore;
     }
 }

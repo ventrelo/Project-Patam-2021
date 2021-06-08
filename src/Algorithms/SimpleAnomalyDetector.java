@@ -2,8 +2,8 @@ package Algorithms;
 
 import model.TimeSeries.*;
 
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
@@ -44,6 +44,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 					maxIndex = j;
 				}
 			}
+
 			if(maxCorr > threshold) // Features will be definitely correlated if max is higher than 0.9,this is changeable
 			{
 				String f1 = header.get(i);
@@ -96,7 +97,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		}
 		return retList;
 	}
-	
+
 	public List<CorrelatedFeatures> getNormalModel(){
 		return this.corrFeat;
 	}
@@ -136,5 +137,26 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 			}
 		}
 		return -1;
+	}
+
+	public HashMap learnNormalSingleton(float[] f1, float[] f2) {
+		HashMap tmpHashMap = new HashMap();
+		Point[] points;
+		points = makePointsArray(f1,f2);
+		Line line = StatLib.linear_reg(points);
+		float maxDev = 0;
+		for(Point p:points)
+		{
+			float temp = StatLib.dev(p,line);
+			if(maxDev < temp)
+			{
+				maxDev = temp;
+			}
+		}
+		maxDev*=1.1;
+
+		tmpHashMap.put("line", line);
+		tmpHashMap.put("maxDev", maxDev);
+		return tmpHashMap;
 	}
 }
