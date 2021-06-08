@@ -1,4 +1,6 @@
-package model.TimeSeries;
+package Algorithms;
+
+import model.TimeSeries.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +68,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
                 Point[] points = StatLib.makePointsArray(f1,f2);
                 ArrayList<Point> pointsArrayList = StatLib.fromArrayToArrayList(points);
                 Circle circle = StatLib.welzl(pointsArrayList, new ArrayList<>());
-                float maxDistance = StatLib.getMaxPointDistance(points, circle.center);
+                float maxDistance = StatLib.getMaxPointDistance(points, circle.getCenter());
 
                 tmpHashMap.put("algorithm", "hybrid");
                 tmpHashMap.put("feature1", correlatedFeature.feature1);
@@ -108,7 +110,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
 
                 Point[] points = StatLib.makePointsArray(ts.getValuesOfHeader(feature1),ts.getValuesOfHeader(feature2));
                 for (int i = 0; i < points.length; i++)
-                    if(StatLib.distance(points[i], circle.center) > maxDistance)
+                    if(StatLib.distance(points[i], circle.getCenter()) > maxDistance)
                         anomalies.add(new AnomalyReport(feature1 + "-" + feature2, i));
             } else {
                 String feature1 = (String) correlationData.get("feature1");
