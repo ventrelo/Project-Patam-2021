@@ -6,7 +6,7 @@ import java.util.Observable;
 
 public class playableTS extends Observable implements playable  {
     public int MaxFrame;
-    TimeSeries timeSeries;
+    public TimeSeries timeSeries;
     public Float[] values;
     @Override
     public void play(int frame) {

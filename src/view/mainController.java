@@ -9,18 +9,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.XMLParser;
 import view.joystick.Joystick;
 import vm.mainVM;
+
+import javax.swing.text.LabelView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,10 +54,14 @@ public class mainController implements Observer {
     @FXML
     Label pb_speed, js_vid_time;
     @FXML
-    LineChart<DoubleProperty,DoubleProperty> graph1,graph2;
+    LineChart<Number,Number> graph1,graph2,graph3;
+    @FXML
+    NumberAxis xAxisT,yAxisT,xAxisC,yAxisC;
 
     DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
-
+    boolean updateGraphs = false;
+    String str = null;
+    XYChart.Series seriesTime = new XYChart.Series();
 
     public vm.mainVM mainVM;
     public void setMainVM(mainVM vm)
@@ -126,7 +137,7 @@ public class mainController implements Observer {
     {
         Stage stage = new Stage();
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("out"));
+        directoryChooser.setInitialDirectory(new File("."));
         File file = directoryChooser.showDialog(stage);
         Alert alert = null;
         if (file != null) {
@@ -149,7 +160,13 @@ public class mainController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
         updateJoystick();
+        if(updateGraphs == true)
+        {
+            fillGraphs(str);
+        }
+
     }
     public void updateJoystick()
     {
@@ -176,10 +193,14 @@ public class mainController implements Observer {
     }
     public void toggleGraphs(ActionEvent event)
     {
-        if(cb_graphs.isVisible())
+        if(cb_graphs.isVisible()) {
             cb_graphs.setVisible(false);
-        else
+            graph3.setVisible(false);
+        }
+        else {
             cb_graphs.setVisible(true);
+            graph3.setVisible(true);
+        }
     }
     public void toggleProps(ActionEvent event)
     {
@@ -202,10 +223,24 @@ public class mainController implements Observer {
 
 
     public void selected(MouseEvent mouseEvent) {
-        Node selected = (Node) mouseEvent.getSource();
-        String str = selected.getId();
-        System.out.println(str);
+        Label selected = (Label) mouseEvent.getSource();
+        clearLabels();
+        selected.setTextFill(Color.color(0,0,1));
+        updateGraphs = true;
+        str = selected.getId();
+        if(mainVM.playable != null)
+            fillGraphs(str);
     }
+
+    private void clearLabels() {
+        cb_height.setTextFill(Color.color(0,0,0));
+        cb_pitch.setTextFill(Color.color(0,0,0));
+        cb_roll.setTextFill(Color.color(0,0,0));
+        cb_dir.setTextFill(Color.color(0,0,0));
+        cb_speed.setTextFill(Color.color(0,0,0));
+        cb_yaw.setTextFill(Color.color(0,0,0));;
+    }
+
     public void play()
     {
         mainVM.play();
@@ -226,4 +261,44 @@ public class mainController implements Observer {
             pb_speed_d.setValue(pb_speed_d.getValue() - 0.25);
         }
     }
+    public void fillGraphs(String str)
+    {
+        fillCorrolationGraph(str);
+        fillTimeGraph(str);
+        if(mainVM.detector!=null)
+            fillAnoGraph(str,graph3);
+    }
+
+    private void fillCorrolationGraph(String str) {
+        XYChart.Series seriesTime = new XYChart.Series();
+        mainVM.fillSeriesC(seriesTime,str);
+        graph2.getData().clear();
+        graph2.getData().add(seriesTime);
+
+    }
+
+    private void fillTimeGraph(String str) {
+
+        XYChart.Series seriesTime = new XYChart.Series();
+        mainVM.fillSeriesT(seriesTime,str);
+        graph1.getData().clear();
+        graph1.getData().add(seriesTime);
+    }
+    private void fillAnoGraph(String str,LineChart<Number,Number> graph)
+    {
+        mainVM.fillAnoSeries(graph,str);
+    }
+    public void learnN()
+    {
+        mainVM.learnN();
+    }
+    public void detectAno()
+    {
+        mainVM.detect();
+    }
+    
+
+
+
+
 }
