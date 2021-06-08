@@ -1,4 +1,4 @@
-package Algorithms;
+package model.TimeSeries;
 
 import model.TimeSeries.*;
 
