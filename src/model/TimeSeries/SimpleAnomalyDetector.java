@@ -1,7 +1,5 @@
 package model.TimeSeries;
 
-import model.TimeSeries.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
