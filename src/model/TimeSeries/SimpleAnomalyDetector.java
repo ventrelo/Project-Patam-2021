@@ -1,6 +1,4 @@
-package Algorithms;
-
-import model.TimeSeries.*;
+package model.TimeSeries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
