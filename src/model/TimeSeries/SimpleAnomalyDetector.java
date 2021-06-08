@@ -95,7 +95,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		}
 		return retList;
 	}
-	
+
 	public List<CorrelatedFeatures> getNormalModel(){
 		return this.corrFeat;
 	}
