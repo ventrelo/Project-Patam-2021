@@ -1,10 +1,15 @@
-package model.TimeSeries;
+package Algorithms;
+
+import model.TimeSeries.AnomalyReport;
+import model.TimeSeries.StatLib;
+import model.TimeSeries.TimeSeries;
+import model.TimeSeries.TimeSeriesAnomalyDetector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ZScore implements TimeSeriesAnomalyDetector{
+public class ZScore implements TimeSeriesAnomalyDetector {
     private final ArrayList<Float> maxZScores;
 
     public ZScore() {
