@@ -54,7 +54,7 @@ public class mainController implements Observer {
     @FXML
     Label pb_speed, js_vid_time;
     @FXML
-    LineChart<Number,Number> graph1,graph2;
+    LineChart<Number,Number> graph1,graph2,graph3;
     @FXML
     NumberAxis xAxisT,yAxisT,xAxisC,yAxisC;
 
@@ -137,7 +137,7 @@ public class mainController implements Observer {
     {
         Stage stage = new Stage();
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("out"));
+        directoryChooser.setInitialDirectory(new File("."));
         File file = directoryChooser.showDialog(stage);
         Alert alert = null;
         if (file != null) {
@@ -193,10 +193,14 @@ public class mainController implements Observer {
     }
     public void toggleGraphs(ActionEvent event)
     {
-        if(cb_graphs.isVisible())
+        if(cb_graphs.isVisible()) {
             cb_graphs.setVisible(false);
-        else
+            graph3.setVisible(false);
+        }
+        else {
             cb_graphs.setVisible(true);
+            graph3.setVisible(true);
+        }
     }
     public void toggleProps(ActionEvent event)
     {
@@ -261,6 +265,8 @@ public class mainController implements Observer {
     {
         fillCorrolationGraph(str);
         fillTimeGraph(str);
+        if(mainVM.detector!=null)
+            fillAnoGraph(str,graph3);
     }
 
     private void fillCorrolationGraph(String str) {
@@ -268,6 +274,7 @@ public class mainController implements Observer {
         mainVM.fillSeriesC(seriesTime,str);
         graph2.getData().clear();
         graph2.getData().add(seriesTime);
+
     }
 
     private void fillTimeGraph(String str) {
@@ -277,13 +284,17 @@ public class mainController implements Observer {
         graph1.getData().clear();
         graph1.getData().add(seriesTime);
     }
+    private void fillAnoGraph(String str,LineChart<Number,Number> graph)
+    {
+        mainVM.fillAnoSeries(graph,str);
+    }
     public void learnN()
     {
         mainVM.learnN();
     }
     public void detectAno()
     {
-
+        mainVM.detect();
     }
     
 

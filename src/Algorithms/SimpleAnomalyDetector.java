@@ -1,4 +1,6 @@
-package model.TimeSeries;
+package Algorithms;
+
+import model.TimeSeries.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
