@@ -11,6 +11,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import view.joystick.Joystick?>
 
@@ -34,6 +35,7 @@
                   <CheckMenuItem fx:id="toggle_components" mnemonicParsing="false" onAction="#toggleProps" selected="true" text="Components" />
                   <CheckMenuItem fx:id="toggle_stick" mnemonicParsing="false" onAction="#toggleStick" selected="true" text="Control Stick" />
                   <CheckMenuItem fx:id="toggle_stick1" mnemonicParsing="false" onAction="#togglePlayBack" selected="true" text="Playback Bar" />
+                  <CheckMenuItem fx:id="toggle_indi" mnemonicParsing="false" onAction="#toggleIndi" selected="true" text="Indicators" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Options">
@@ -96,7 +98,7 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox fx:id="cb_graphs" layoutY="167.0" prefHeight="300.0" prefWidth="245.0">
+            <VBox fx:id="cb_graphs" layoutX="543.0" layoutY="17.0" prefHeight="481.0" prefWidth="245.0">
                <children>
                   <LineChart fx:id="graph1" animated="false" createSymbols="false" prefHeight="150.0" prefWidth="245.0" title="TimeSteps">
                     <xAxis>
@@ -114,36 +116,44 @@
                         <NumberAxis fx:id="yAxisC" minorTickVisible="false" side="LEFT" upperBound="0.0" />
                      </yAxis>
                   </LineChart>
+                  <LineChart fx:id="graph3" animated="false" prefHeight="150.0" prefWidth="245.0" stylesheets="@anomalyGraph.css" title="Anomaly">
+                     <xAxis>
+                        <NumberAxis minorTickCount="0" minorTickVisible="false" side="BOTTOM" tickMarkVisible="false" upperBound="0.0" fx:id="xAxisT1" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis fx:id="yAxisT1" minorTickVisible="false" side="LEFT" upperBound="0.0" />
+                     </yAxis>
+                  </LineChart>
                </children>
             </VBox>
             <VBox fx:id="cb_vals" layoutX="114.0" layoutY="5.0" prefHeight="125.0" prefWidth="135.0">
                <children>
-                  <Label fx:id="cb_height" alignment="TOP_LEFT" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="height" alignment="TOP_LEFT" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_speed" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="speed" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_dir" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="direction" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_roll" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="roll" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_pitch" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="pitch" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cb_yaw" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
+                  <Label fx:id="yaw" onMousePressed="#selected" prefHeight="27.0" prefWidth="135.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -151,14 +161,34 @@
                </children>
             </VBox>
             <Joystick fx:id="joystick" layoutX="268.0" layoutY="156.0" prefHeight="200.0" prefWidth="200.0" />
-            <LineChart fx:id="graph3" animated="false" layoutX="526.0" layoutY="141.0" prefHeight="150.0" prefWidth="245.0" stylesheets="@anomalyGraph.css" title="Anomaly">
-               <xAxis>
-                  <NumberAxis minorTickCount="0" minorTickVisible="false" side="BOTTOM" tickMarkVisible="false" upperBound="0.0" fx:id="xAxisT1" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis fx:id="yAxisT1" minorTickVisible="false" side="LEFT" upperBound="0.0" />
-               </yAxis>
-            </LineChart>
+            <VBox fx:id="indicators" layoutX="14.0" layoutY="167.0" prefHeight="200.0" prefWidth="135.0">
+               <children>
+                  <Label text="XML settings">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Rectangle fx:id="indi1" arcHeight="5.0" arcWidth="5.0" height="25.0" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                  <Label text="CSV file">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Rectangle fx:id="indi2" arcHeight="5.0" arcWidth="5.0" height="25.0" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                  <Label text="Normal mode">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Rectangle fx:id="indi3" arcHeight="5.0" arcWidth="5.0" height="25.0" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                  <Label text="Detection">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Rectangle fx:id="indi4" arcHeight="5.0" arcWidth="5.0" height="25.0" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+               </children>
+            </VBox>
 
          </children>
       </AnchorPane>

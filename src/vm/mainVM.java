@@ -2,7 +2,8 @@ package vm;
 
 
 
-import model.TimeSeries.SimpleAnomalyDetector;
+import Algorithms.SimpleAnomalyDetector;
+import Algorithms.ZScore;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -98,6 +99,7 @@ public class mainVM extends Observable implements Observer {
               roll.setValue(value[28]);
               pitch.setValue(value[29]);
               yaw.setValue(value[20]);
+              checkIfAlarm();
               setChanged();
               notifyObservers();
           });
@@ -171,7 +173,7 @@ public class mainVM extends Observable implements Observer {
             {
                 anomalyReports.put(ano.timeStep,ano.description);
             }
-            System.out.println(anomalyReports);
+
         }
     }
 
@@ -314,7 +316,17 @@ public class mainVM extends Observable implements Observer {
             e.printStackTrace();
         }
     }
-
+    private void checkIfAlarm()
+    {
+        if(anomalyReports != null)
+        {
+            if(anomalyReports.containsKey(playback_frame))
+            {
+                showAlarm = true;
+            } else
+                showAlarm = false;
+        }
+    }
 
 }
 

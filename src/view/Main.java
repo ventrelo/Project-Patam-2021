@@ -1,5 +1,7 @@
 package view;
 
+import Algorithms.SimpleAnomalyDetector;
+import Algorithms.ZScore;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -8,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.TimeSeries.TimeSeriesAnomalyDetector;
 import model.XMLParserModel;
 import vm.mainVM;
 
@@ -29,6 +32,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 900, 550));
         primaryStage.show();
         mainC.init();
+
 
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
