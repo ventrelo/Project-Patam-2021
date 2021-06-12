@@ -68,7 +68,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
                 Point[] points = StatLib.makePointsArray(f1,f2);
                 ArrayList<Point> pointsArrayList = StatLib.fromArrayToArrayList(points);
                 Circle circle = StatLib.welzl(pointsArrayList, new ArrayList<>());
-                float maxDistance = StatLib.getMaxPointDistance(points, circle.getCenter());
+                float maxDistance = circle.getRadius();
 
                 tmpHashMap.put("algorithm", "hybrid");
                 tmpHashMap.put("feature1", correlatedFeature.feature1);
@@ -109,20 +109,18 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
                 float maxDistance = (float) correlationData.get("maxDistance");
 
                 Point[] points = StatLib.makePointsArray(ts.getValuesOfHeader(feature1),ts.getValuesOfHeader(feature2));
+
                 for (int i = 0; i < points.length; i++)
-                    if(StatLib.distance(points[i], circle.getCenter()) > maxDistance)
+                    if (StatLib.distance(points[i], circle.getCenter()) > maxDistance)
                         anomalies.add(new AnomalyReport(feature1 + "-" + feature2, i));
             } else {
                 String feature1 = (String) correlationData.get("feature1");
                 float[] headerValues = ts.getValuesOfHeader(feature1);
                 float maxZScore = (float) correlationData.get("maxZScore");
 
-                for (int i = 0; i < headerValues.length; i++) {
-                    float currentZScore = ZScore.detectSingleton(headerValues,i);
-
-                    if(currentZScore > maxZScore)
+                for (int i = 0; i < headerValues.length; i++)
+                    if(ZScore.detectSingleton(headerValues,i) > maxZScore)
                         anomalies.add(new AnomalyReport(feature1, i));
-                }
             }
         });
 
