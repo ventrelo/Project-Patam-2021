@@ -31,9 +31,14 @@ public class Circle {
     }
 
     public boolean encapsulates(Point point) {
-        if(StatLib.distance(center,point) < radius) {
+        if(StatLib.distance(center,point) <= radius)
             return true;
-        }
         return false;
+    }
+
+    public boolean isValid() {
+        if(center.x == 0 && center.y == 0 && radius == 0)
+            return false;
+        return true;
     }
 }

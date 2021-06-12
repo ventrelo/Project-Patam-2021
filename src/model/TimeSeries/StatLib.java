@@ -117,16 +117,25 @@ public class StatLib {
 		float sx21 = (float) (Math.pow(p2.x, 2) - Math.pow(p1.x, 2));
 		float sy21 = (float) (Math.pow(p2.y, 2) - Math.pow(p1.y, 2));
 
-		float f = ((sx13) * (x12)
-				+ (sy13) * (x12)
-				+ (sx21) * (x13)
-				+ (sy21) * (x13))
-				/ (2 * ((y31) * (x12) - (y21) * (x13)));
-		float g = ((sx13) * (y12)
-				+ (sy13) * (y12)
-				+ (sx21) * (y13)
-				+ (sy21) * (y13))
-				/ (2 * ((x31) * (y12) - (x21) * (y13)));
+		float division = 2 * ((y31) * (x12) - (y21) * (x13));
+		float f = 0;
+		if (division != 0) {
+			f = ((sx13) * (x12)
+					+ (sy13) * (x12)
+					+ (sx21) * (x13)
+					+ (sy21) * (x13))
+					/ division;
+		}
+
+		division = 2 * ((x31) * (y12) - (x21) * (y13));
+		float g = 0;
+		if (division != 0) {
+			g = ((sx13) * (y12)
+					+ (sy13) * (y12)
+					+ (sx21) * (y13)
+					+ (sy21) * (y13))
+					/ division;
+		}
 
 		float c = -(float) Math.pow(p1.x, 2) - (float) Math.pow(p1.y, 2) - 2 * g * p1.x - 2 * f * p1.y;
 
@@ -149,16 +158,27 @@ public class StatLib {
 
 	public static Circle welzl(ArrayList<Point> points, ArrayList<Point> R) {
 		if (points.isEmpty() || R.size() == 3) {
-			if (R.size() == 3)
-				return findCircle(R.get(0), R.get(1), R.get(2));
-			else if(R.size() == 2) {
+			if (R.size() == 3) {
+				Circle c = findCircle(R.get(0), R.get(1), R.get(2));
+				if (!c.isValid())
+					c = findCircle(R.get(0), R.get(2), R.get(1));
+				if (!c.isValid())
+					c = findCircle(R.get(1), R.get(0), R.get(2));
+				if (!c.isValid())
+					c = findCircle(R.get(1), R.get(2), R.get(0));
+				if (!c.isValid())
+					c = findCircle(R.get(2), R.get(0), R.get(1));
+				if (!c.isValid())
+					c = findCircle(R.get(2), R.get(1), R.get(0));
+				return c;
+			}  else if(R.size() == 2) {
 				Point p1 = R.get(0);
 				Point p2 = R.get(1);
 				Point centerPoint = new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 				return new Circle(centerPoint, 0);
 			} else if (R.size() == 1) {
 				return new Circle(R.get(0), 0);
-			} else {
+			} else if (R.size() == 0) {
 				return new Circle();
 			}
 		}
@@ -168,22 +188,13 @@ public class StatLib {
 		Point p = points.remove(random_index);
 		Circle D = welzl(points, R);
 
-		if(D.encapsulates(p)) {
-			return D;
+		if(!D.encapsulates(p)) {
+			R.add(p);
+			D = welzl(points, R);
+			R.remove(p);
+			points.add(p);
 		}
 
-		R.add(p);
-		return welzl(points, R);
-	}
-
-	public static float getMaxPointDistance(Point[] points, Point center) {
-		float maxDistance = 0;
-		for(Point p: points) {
-			float distance = distance(p, center);
-			if (distance > maxDistance) {
-				maxDistance = distance;
-			}
-		}
-		return maxDistance;
+		return D;
 	}
 }
