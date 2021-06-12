@@ -19,36 +19,36 @@
     <throttle>
         <min>-1</min>
         <max>1</max>
-        <index>6</index>
+        <index>3</index>
     </throttle>
-    <cb_yaw>
+    <yaw>
         <min>-1</min>
         <max>1</max>
         <index>20</index>
-    </cb_yaw>
-    <cb_speed>
+    </yaw>
+    <speed>
         <min>-1</min>
         <max>1</max>
         <index>24</index>
-    </cb_speed>
-    <cb_height>
+    </speed>
+    <height>
         <min>-1</min>
         <max>1</max>
         <index>25</index>
-    </cb_height>
-    <cb_roll>
+    </height>
+    <roll>
         <min>-1</min>
         <max>1</max>
         <index>28</index>
-    </cb_roll>
-    <cb_pitch>
+    </roll>
+    <pitch>
         <min>-1</min>
         <max>1</max>
         <index>29</index>
-    </cb_pitch>
-    <cb_dir>
+    </pitch>
+    <direction>
         <min>-1</min>
         <max>1</max>
         <index>36</index>
-    </cb_dir>
+    </direction>
 </config>

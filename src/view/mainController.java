@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -42,7 +43,7 @@ import java.util.Optional;
 public class mainController implements Observer {
 
     @FXML
-    VBox cb_graphs,cb_props,cb_vals;
+    VBox cb_graphs,cb_props,cb_vals,indicators;
     @FXML
     AnchorPane playback_bar;
     @FXML
@@ -50,18 +51,21 @@ public class mainController implements Observer {
     @FXML
     Joystick joystick;
     @FXML
-    Label cb_height,cb_speed,cb_dir,cb_roll,cb_pitch,cb_yaw;
+    Label height,speed,direction,roll,pitch,yaw;
     @FXML
     Label pb_speed, js_vid_time;
     @FXML
     LineChart<Number,Number> graph1,graph2,graph3;
     @FXML
     NumberAxis xAxisT,yAxisT,xAxisC,yAxisC;
+    @FXML
+    Rectangle indi1, indi2, indi3,indi4;
 
     DoubleProperty pb_speed_d = new SimpleDoubleProperty(1.00);
     boolean updateGraphs = false;
     String str = null;
-    XYChart.Series seriesTime = new XYChart.Series();
+
+
 
     public vm.mainVM mainVM;
     public void setMainVM(mainVM vm)
@@ -69,14 +73,15 @@ public class mainController implements Observer {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(5);
         this.mainVM = vm;
-        mainVM.parseXML("./Assets/xmlSettings");
+        mainVM.parseXML("./Assets/xmlSettings.xml");
+        indi1.setFill(Color.GREEN);
         // Clock Board labels binding
-        cb_height.textProperty().bind(mainVM.height.asString("%.4f"));
-        cb_speed.textProperty().bind(mainVM.speed.asString("%.4f"));
-        cb_dir.textProperty().bind(mainVM.direction.asString("%.4f"));
-        cb_roll.textProperty().bind(mainVM.roll.asString("%.4f"));
-        cb_pitch.textProperty().bind(mainVM.pitch.asString("%.4f"));
-        cb_yaw.textProperty().bind(mainVM.yaw.asString("%.4f"));
+        height.textProperty().bind(mainVM.height.asString("%.4f"));
+        speed.textProperty().bind(mainVM.speed.asString("%.4f"));
+        direction.textProperty().bind(mainVM.direction.asString("%.4f"));
+        roll.textProperty().bind(mainVM.roll.asString("%.4f"));
+        pitch.textProperty().bind(mainVM.pitch.asString("%.4f"));
+        yaw.textProperty().bind(mainVM.yaw.asString("%.4f"));
 
         //Play Back bar label binding
         pb_speed.textProperty().bind(pb_speed_d.asString());
@@ -98,18 +103,17 @@ public class mainController implements Observer {
         File file = fil_chooser.showOpenDialog(stage);
         Alert alert;
         if (file != null) {
-            try {
-                Files.copy(Paths.get(file.getAbsolutePath()), Paths.get("./Assets/xmlSettings"),StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mainVM.parseXML("./Assets/xmlSettings");
+
+            mainVM.parseXML(file.getAbsolutePath());
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("XML settings upload successful");
+            indi1.setFill(Color.GREEN);
+
         } else
         {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("XML settings upload FAILED");
+            indi1.setFill(Color.BLACK);
         }
         alert.showAndWait();
     }
@@ -126,10 +130,14 @@ public class mainController implements Observer {
             js_playback_bar.maxProperty().setValue(mainVM.playable.MaxFrame);
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("CSV  upload successful");
+            indi2.setFill(Color.GREEN);
+            indi4.setFill(Color.BLACK);
         } else
         {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("CSV upload FAILED");
+            indi2.setFill(Color.BLACK);
+            indi4.setFill(Color.BLACK);
         }
         alert.showAndWait();
     }
@@ -162,6 +170,7 @@ public class mainController implements Observer {
     public void update(Observable o, Object arg) {
 
         updateJoystick();
+        setAlARMS();
         if(updateGraphs == true)
         {
             fillGraphs(str);
@@ -195,11 +204,9 @@ public class mainController implements Observer {
     {
         if(cb_graphs.isVisible()) {
             cb_graphs.setVisible(false);
-            graph3.setVisible(false);
         }
         else {
             cb_graphs.setVisible(true);
-            graph3.setVisible(true);
         }
     }
     public void toggleProps(ActionEvent event)
@@ -220,6 +227,13 @@ public class mainController implements Observer {
         else
             playback_bar.setVisible(true);
     }
+    public void toggleIndi(ActionEvent event)
+    {
+        if(indicators.isVisible())
+            indicators.setVisible(false);
+        else
+            indicators.setVisible(true);
+    }
 
 
     public void selected(MouseEvent mouseEvent) {
@@ -233,12 +247,12 @@ public class mainController implements Observer {
     }
 
     private void clearLabels() {
-        cb_height.setTextFill(Color.color(0,0,0));
-        cb_pitch.setTextFill(Color.color(0,0,0));
-        cb_roll.setTextFill(Color.color(0,0,0));
-        cb_dir.setTextFill(Color.color(0,0,0));
-        cb_speed.setTextFill(Color.color(0,0,0));
-        cb_yaw.setTextFill(Color.color(0,0,0));;
+        height.setTextFill(Color.color(0,0,0));
+        pitch.setTextFill(Color.color(0,0,0));
+        roll.setTextFill(Color.color(0,0,0));
+        direction.setTextFill(Color.color(0,0,0));
+        speed.setTextFill(Color.color(0,0,0));
+        yaw.setTextFill(Color.color(0,0,0));;
     }
 
     public void play()
@@ -263,8 +277,8 @@ public class mainController implements Observer {
     }
     public void fillGraphs(String str)
     {
-        fillCorrolationGraph(str);
         fillTimeGraph(str);
+        fillCorrolationGraph(str);
         if(mainVM.detector!=null)
             fillAnoGraph(str,graph3);
     }
@@ -291,10 +305,23 @@ public class mainController implements Observer {
     public void learnN()
     {
         mainVM.learnN();
+        indi3.setFill(Color.GREEN);
     }
     public void detectAno()
     {
         mainVM.detect();
+        indi4.setFill(Color.GREEN);
+    }
+    private void setAlARMS()
+    {
+        if(mainVM.showAlarm)
+        {
+            cb_graphs.setStyle("-fx-background-color:#d71f1f;");
+
+        }else
+        {
+            cb_graphs.setStyle("-fx-background-color:#f4f4f4;");
+        }
     }
     
 
