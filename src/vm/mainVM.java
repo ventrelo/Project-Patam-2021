@@ -173,7 +173,6 @@ public class mainVM extends Observable implements Observer {
             {
                 anomalyReports.put(ano.timeStep,ano.description);
             }
-
         }
     }
 
@@ -320,7 +319,8 @@ public class mainVM extends Observable implements Observer {
     {
         if(anomalyReports != null)
         {
-            if(anomalyReports.containsKey(playback_frame))
+
+            if(anomalyReports.containsKey(playback_frame.longValue()))
             {
                 showAlarm = true;
             } else

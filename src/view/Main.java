@@ -28,7 +28,7 @@ public class Main extends Application {
         mainC = loader.getController();
         mainC.setMainVM(mainVM);
         mainVM.addObserver(mainC);
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Flight Simulator Detector");
         primaryStage.setScene(new Scene(root, 900, 550));
         primaryStage.show();
         mainC.init();
