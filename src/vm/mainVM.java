@@ -181,35 +181,34 @@ public class mainVM extends Observable implements Observer {
         int indexCor = -1;
         String fetur1 = playable.timeSeries.getHeaders().get(indexMain);
         String fetur2 = null;
-
-        for(CorrelatedFeatures cor : helper.getNormalModel())
-        {
-            if(fetur1.equals(cor.feature1))
-            {
-                fetur2 = cor.feature2;
-                indexCor++;
-                break;
-            }
-
-
-        }
-        if (fetur2 != null) {
-
-
-            for (String string : playable.timeSeries.getHeaders()) {
-                if (fetur2.equals(string)) {
+        if(helper.getNormalModel() !=null) {
+            for (CorrelatedFeatures cor : helper.getNormalModel()) {
+                if (fetur1.equals(cor.feature1)) {
+                    fetur2 = cor.feature2;
+                    indexCor++;
                     break;
-                } else indexCor++;
-            }
-
-            List<Float[]> vals = playable.timeSeries.getValues();
-            series.getData().clear();
-            if (indexCor != -1)
-                for (int i = 0; i < playback_frame.getValue(); i++) {
-                    //if(i%10==0)
-                    series.getData().add(new XYChart.Data(vals.get(i)[indexMain],vals.get(i)[indexCor]));
-
                 }
+
+
+            }
+            if (fetur2 != null) {
+
+
+                for (String string : playable.timeSeries.getHeaders()) {
+                    if (fetur2.equals(string)) {
+                        break;
+                    } else indexCor++;
+                }
+
+                List<Float[]> vals = playable.timeSeries.getValues();
+                series.getData().clear();
+                if (indexCor != -1)
+                    for (int i = 0; i < playback_frame.getValue(); i++) {
+                        //if(i%10==0)
+                        series.getData().add(new XYChart.Data(vals.get(i)[indexMain], vals.get(i)[indexCor]));
+
+                    }
+            }
         }
     }
     public void fillAnoSeries(LineChart<Number, Number> graph, String str) {
