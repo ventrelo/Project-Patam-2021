@@ -308,8 +308,16 @@ public class mainController implements Observer {
     }
     public void learnN()
     {
-        mainVM.learnN();
-        indi3.setFill(Color.GREEN);
+        if(mainVM.detector!= null) {
+            mainVM.learnN();
+            indi3.setFill(Color.GREEN);
+        } else
+        {
+            Alert alert = null;
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Please Upload an Anomaly Detector");
+            alert.showAndWait();
+        }
     }
     public void detectAno()
     {
