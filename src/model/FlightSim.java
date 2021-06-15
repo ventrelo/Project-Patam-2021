@@ -18,7 +18,7 @@ public class FlightSim{
             socket=new Socket("localhost", 5400);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+
             return false;
         }
     }

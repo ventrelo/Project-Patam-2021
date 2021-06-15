@@ -316,6 +316,12 @@ public class mainController implements Observer {
         if(mainVM.detector!= null) {
             mainVM.detect();
             indi4.setFill(Color.GREEN);
+        } else
+        {
+            Alert alert = null;
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Please Upload an Anomaly Detector");
+            alert.showAndWait();
         }
     }
     private void setAlARMS()
