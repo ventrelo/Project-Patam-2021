@@ -98,6 +98,8 @@ public class mainController implements Observer {
 
         Stage stage = new Stage();
         FileChooser fil_chooser = new FileChooser();
+        String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+        fil_chooser.setInitialDirectory(new File(currentPath));
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML file (*.xml)","*.xml");
         fil_chooser.getExtensionFilters().add(extensionFilter);
         File file = fil_chooser.showOpenDialog(stage);
@@ -121,6 +123,8 @@ public class mainController implements Observer {
 
         Stage stage = new Stage();
         FileChooser fil_chooser = new FileChooser();
+        String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+        fil_chooser.setInitialDirectory(new File(currentPath));
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV file (*.csv)","*.csv");
         fil_chooser.getExtensionFilters().add(extensionFilter);
         File file = fil_chooser.showOpenDialog(stage);
