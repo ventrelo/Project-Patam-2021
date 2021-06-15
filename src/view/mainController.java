@@ -313,8 +313,10 @@ public class mainController implements Observer {
     }
     public void detectAno()
     {
-        mainVM.detect();
-        indi4.setFill(Color.GREEN);
+        if(mainVM.detector!= null) {
+            mainVM.detect();
+            indi4.setFill(Color.GREEN);
+        }
     }
     private void setAlARMS()
     {
